@@ -37,9 +37,9 @@ void Player::update(float deltaTime)
     {
 		animationWalkCycleTimer += deltaTime;
 
-        if(animationWalkCycleTimer >= 0.15f)
+        if(animationWalkCycleTimer >= 0.18f)
         {
-            animationWalkCycleTimer -= 0.15f;
+            animationWalkCycleTimer -= 0.18f;
             currentFrameIndex++;
             if (currentFrameIndex > 3)
                 currentFrameIndex = 1;

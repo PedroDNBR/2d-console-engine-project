@@ -11,7 +11,7 @@ std::unique_ptr<Sprite> importSprite(const std::string& filename)
 	if (!inputFile.is_open())
 	{
 		std::cout << "Failed to open file: " << filename << std::endl;
-		return std::make_unique<Sprite>(0, 0, 0, 0);
+		return std::make_unique<Sprite>(0, 0);
 	}
 
 	int width, height;
@@ -23,7 +23,7 @@ std::unique_ptr<Sprite> importSprite(const std::string& filename)
 	std::getline(inputFile, line);
 	height = std::stoi(line);
 
-	std::unique_ptr<Sprite> importedSprite = std::make_unique<Sprite>(width, height,0,0);
+	std::unique_ptr<Sprite> importedSprite = std::make_unique<Sprite>(width, height);
 
 	int index = 0;
 	while (std::getline(inputFile, line, ';'))
@@ -68,7 +68,7 @@ std::unique_ptr<Sprite> importSpriteFromBinary(const std::string& filename)
 	if (!inputFile.is_open())
 	{
 		std::cout << "Failed to open binary file: " << filename << std::endl;
-		return std::make_unique<Sprite>(0, 0, 0, 0);
+		return std::make_unique<Sprite>(0, 0);
 	}
 
 	std::array<char, 4> magic{};
@@ -77,7 +77,7 @@ std::unique_ptr<Sprite> importSpriteFromBinary(const std::string& filename)
 	if (!inputFile.good() || !std::equal(magic.begin(), magic.end(), std::begin(SPRITE_MAGIC)))
 	{
 		std::cout << "Invalid sprite binary file: " << filename << std::endl;
-		return std::make_unique<Sprite>(0, 0, 0, 0);
+		return std::make_unique<Sprite>(0, 0);
 	}
 
 	uint32_t version = 0;
@@ -87,7 +87,7 @@ std::unique_ptr<Sprite> importSpriteFromBinary(const std::string& filename)
 	if (!readBinary(inputFile, version) || !readBinary(inputFile, width) || !readBinary(inputFile, height))
 	{
 		std::cout << "Failed to read sprite header: " << filename << std::endl;
-		return std::make_unique<Sprite>(0, 0, 0, 0);
+		return std::make_unique<Sprite>(0, 0);
 	}
 
 	if (version != SPRITE_VERSION)
@@ -101,10 +101,10 @@ std::unique_ptr<Sprite> importSpriteFromBinary(const std::string& filename)
 			<< static_cast<int>(SPRITE_VERSION)
 			<< std::endl;
 
-		return std::make_unique<Sprite>(0, 0, 0, 0);
+		return std::make_unique<Sprite>(0, 0);
 	}
 
-	std::unique_ptr<Sprite> importedSprite = std::make_unique<Sprite>(width, height, 0, 0);
+	std::unique_ptr<Sprite> importedSprite = std::make_unique<Sprite>(width, height);
 	const uint32_t pixelCount = static_cast<uint32_t>(width) * static_cast<uint32_t>(height);
 
 	for (uint32_t i = 0; i < pixelCount; i++)
@@ -115,7 +115,7 @@ std::unique_ptr<Sprite> importSpriteFromBinary(const std::string& filename)
 		if (!readBinary(inputFile, activeByte) || !readBinary(inputFile, colorByte))
 		{
 			std::cout << "Failed to read pixel data at index " << i << " in file: " << filename << std::endl;
-			return std::make_unique<Sprite>(0, 0, 0, 0);
+			return std::make_unique<Sprite>(0, 0);
 		}
 
 		Pixel pixel;

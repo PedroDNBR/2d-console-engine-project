@@ -35,7 +35,7 @@ void Scene::update(ConsoleRenderer* renderer, float deltaTime)
 	{
 		e->update(deltaTime);
 		if (e->currentFrame != nullptr)
-			renderer->drawSprite(e->currentFrame, e->worldX, e->worldY, e->flipSprite);
+			renderer->queueDraw(e->currentFrame, e->worldX, e->worldY, e->flipSprite);
 	}
 	CameraFollowTarget(renderer, deltaTime);
 }
@@ -106,7 +106,7 @@ void Scene::setTilemapsOnPosition(ConsoleRenderer* renderer)
 		for (size_t x = 0; x < tilesStructure[y].size(); x++)
 		{
 			size_t spriteIndex = tilesStructure[y][x];
-			renderer->drawSprite(tilemap[spriteIndex].get(), tilemap[spriteIndex]->width * x, tilemap[spriteIndex]->height * y);
+			renderer->queueDraw(tilemap[spriteIndex].get(), tilemap[spriteIndex]->width * x, tilemap[spriteIndex]->height * y);
 		}
 	}
 }

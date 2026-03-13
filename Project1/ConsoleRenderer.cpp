@@ -18,6 +18,11 @@ void ConsoleRenderer::clear()
     }
 }
 
+void ConsoleRenderer::queueDraw(const Sprite* sprite, float worldX, float worldY, bool flip)
+{
+	spritesToRender.push_back(SpriteToRender{ sprite, worldX, worldY, flip });
+}
+
 void ConsoleRenderer::drawPixel(int x, int y, wchar_t ch, WORD color)
 {
     if (x < 0 || x >= logicalWidth || y < 0 || y >= logicalHeight) return;
@@ -62,5 +67,10 @@ bool ConsoleRenderer::isOnCamera(float worldX, float worldY, int w, int h)
 
 void ConsoleRenderer::present()
 {
+    for(const auto& s : spritesToRender)
+		drawSprite(s.sprite, s.worldX, s.worldY, s.flip);
+
     WriteConsoleOutput(handle, buffer.data(), { (SHORT)realWidth, (SHORT)realHeight }, { 0, 0 }, &rect);
+
+    spritesToRender.clear();
 }

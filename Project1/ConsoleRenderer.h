@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "SpriteToRender.h"
 
 class ConsoleRenderer
 {
@@ -15,6 +16,8 @@ private:
     std::vector<CHAR_INFO> buffer;
     SMALL_RECT rect;
 
+    std::vector<SpriteToRender> spritesToRender;
+
 public:
     Camera camera;
 
@@ -24,6 +27,7 @@ public:
     bool isOnCamera(float worldX, float worldY, int w, int h);
     void present();
     void clear();
+    void queueDraw(const Sprite* sprite, float worldX, float worldY, bool flip = false);
 
     int getLogicalWidth() { return logicalWidth; }
     int getLogicalHeight() { return logicalHeight; }
