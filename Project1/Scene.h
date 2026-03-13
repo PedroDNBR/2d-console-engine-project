@@ -3,25 +3,26 @@
 #include "Sprite.h"
 #include "Entity.h"
 #include "Player.h"
-class ConsoleEngine;
+#include <memory>
+class ConsoleRenderer;
 
 class Scene
 {
 public:
 	Scene(std::vector<std::vector<int>> tilemap) : tilesStructure(tilemap) {}
-	void start(ConsoleEngine* engine);
-	void update(ConsoleEngine* engine, float deltaTime);
+	void start(ConsoleRenderer* engine);
+	void update(ConsoleRenderer* engine, float deltaTime);
 	void destroy();
 
 	bool isTileSolid(float worldX, float worldY, int width, int height);
 	bool isTileSolidAtPoint(float worldX, float worldY);
 
 protected:
-	std::vector<Entity*> entities;
+	std::vector<std::unique_ptr<Entity>> entities;
+	std::vector<std::unique_ptr<Sprite>> spritesUsedInScene;
 
-	std::vector<Sprite*> tilemap;
+	std::vector<std::unique_ptr<Sprite>> tilemap;
 	std::vector<int> tilemapPhysics;
-
 	std::vector<std::vector<int>> tilesStructure;
 
 	const int positiveXcameraOffset = 60;
@@ -31,9 +32,9 @@ protected:
 
 	void loadTilemap();
 
-	void setTilemapsOnPosition(ConsoleEngine* engine);
+	void setTilemapsOnPosition(ConsoleRenderer* engine);
 
-	void CameraFollowTarget(ConsoleEngine* engine, float deltaTime);
+	void CameraFollowTarget(ConsoleRenderer* engine, float deltaTime);
 
 };
 

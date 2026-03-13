@@ -11,15 +11,43 @@ void Player::update(float deltaTime)
             yVelocity += 200.f * deltaTime;
     }
 
-    isGrounded = scene->isTileSolidAtPoint(worldX, worldY + sprite->height + 1) ||
-        scene->isTileSolidAtPoint(worldX + sprite->width, worldY + sprite->height + 1);
+    isGrounded = scene->isTileSolidAtPoint(worldX, worldY + currentFrame->height + 1) ||
+        scene->isTileSolidAtPoint(worldX + currentFrame->width, worldY + currentFrame->height + 1);
 
 
     if ((GetKeyState('W') & 0x8000) && isGrounded) yVelocity = -100.f;
 
     move(0, yVelocity * deltaTime);
 
-    if (GetKeyState('A') & 0x8000) move(-30.0f * deltaTime, 0);
-    if (GetKeyState('D') & 0x8000) move(30.0f * deltaTime, 0);
-    //if (GetKeyState('S') & 0x8000) move(0, 30.0f * deltaTime);
+    bool isMoving = false;
+
+    if (GetKeyState('A') & 0x8000)
+    {
+        move(-30.0f * deltaTime, 0);
+        isMoving = true;
+        flipSprite = true;
+    }
+    else if (GetKeyState('D') & 0x8000)
+    {
+        move(30.0f * deltaTime, 0);
+        isMoving = true;
+        flipSprite = false;
+    }
+    if (isMoving)
+    {
+		animationWalkCycleTimer += deltaTime;
+
+        if(animationWalkCycleTimer >= 0.15f)
+        {
+            animationWalkCycleTimer -= 0.15f;
+            currentFrameIndex++;
+            if (currentFrameIndex > 3)
+                currentFrameIndex = 1;
+		}
+    }
+    else
+    {
+        currentFrameIndex = 0;
+    }
+    currentFrame = frames[currentFrameIndex];
 }

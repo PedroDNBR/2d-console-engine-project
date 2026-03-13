@@ -3,66 +3,69 @@
 #include "ConsoleEngine.h"
 #include <iostream>
 
-void Scene::start(ConsoleEngine* engine)
+void Scene::start(ConsoleRenderer* renderer)
 {
-	Player* mauro = new Player(54, 30);
-	mauro->sprite = importSprite("./Sprites/mauro.tspr"); //apenas para teste
-	entities.push_back(mauro); //apenas para teste
-	loadTilemap();
-	engine->camera.target = mauro;
+	std::unique_ptr<Player> mauro = std::make_unique<Player>(54, 30);
 
-	for (auto e : entities)
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/mauro")));
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurowalk1")));
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurowalk2")));
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurowalk3")));
+	mauro->currentFrame = spritesUsedInScene[0].get();  //apenas para teste
+	mauro->frames.push_back(spritesUsedInScene[0].get());  //apenas para teste
+	mauro->frames.push_back(spritesUsedInScene[1].get());  //apenas para teste
+	mauro->frames.push_back(spritesUsedInScene[2].get());  //apenas para teste
+	mauro->frames.push_back(spritesUsedInScene[3].get());  //apenas para teste
+
+	entities.push_back(std::move(mauro)); //apenas para teste
+	loadTilemap();
+	renderer->camera.target = entities[0].get();
+
+	for (const auto& e : entities)
 	{
 		e->scene = this;
 		e->start();
 	}
 }
 
-void Scene::update(ConsoleEngine* engine, float deltaTime)
+void Scene::update(ConsoleRenderer* renderer, float deltaTime)
 {
-	for (auto e : entities)
+	setTilemapsOnPosition(renderer);
+	for (const auto& e : entities)
 	{
 		e->update(deltaTime);
-		
+		if (e->currentFrame != nullptr)
+			renderer->drawSprite(e->currentFrame, e->worldX, e->worldY, e->flipSprite);
 	}
-	setTilemapsOnPosition(engine);
-	for (auto e : entities)
-	{
-		if (e->sprite != nullptr)
-			engine->drawSprite(e->sprite, e->worldX, e->worldY);
-	}
-	CameraFollowTarget(engine, deltaTime);
+	CameraFollowTarget(renderer, deltaTime);
 }
 
 void Scene::destroy()
 {
-	for (auto t : tilemap) delete t;
-
-	for (auto e : entities) delete e;
-
+	spritesUsedInScene.clear();
 	tilemap.clear();
 	entities.clear();
 }
 
-void Scene::CameraFollowTarget(ConsoleEngine* engine, float deltaTime)
+void Scene::CameraFollowTarget(ConsoleRenderer* renderer, float deltaTime)
 {
-	float leftLimit = engine->camera.x + positiveXcameraOffset;
-	float rightLimit = engine->camera.x + (engine->getLogicalWidth() / 2) - negativeXcameraOffset;
+	float leftLimit = renderer->camera.x + positiveXcameraOffset;
+	float rightLimit = renderer->camera.x + (renderer->getLogicalWidth() / 2) - negativeXcameraOffset;
 
-	if (engine->camera.target->worldX > leftLimit)
-		engine->camera.x = engine->camera.target->worldX - std::floor(engine->getLogicalWidth() / 4.f) - 9;
+	if (renderer->camera.target->worldX > leftLimit && renderer->camera.x < ((tilesStructure[0].size() - 1) * tilemap[0]->width) - std::floor(renderer->getLogicalWidth() / 4.f) - negativeXcameraOffset)
+		renderer->camera.x = renderer->camera.target->worldX - std::floor(renderer->getLogicalWidth() / 4.f) - 9;
 
-	if (engine->camera.target->worldX < rightLimit)
-		engine->camera.x = engine->camera.target->worldX - std::floor(engine->getLogicalWidth() / 4.f) + 8;
+	if (renderer->camera.target->worldX < rightLimit && renderer->camera.x - 1 > 0)
+		renderer->camera.x = renderer->camera.target->worldX - std::floor(renderer->getLogicalWidth() / 4.f) + 8;
 
-	float topLimit = engine->camera.y + positiveYcameraOffset;
-	float bottomLimit = engine->camera.y + engine->getLogicalHeight() - negativeYcameraOffset;
+	float topLimit = renderer->camera.y + positiveYcameraOffset;
+	float bottomLimit = renderer->camera.y + renderer->getLogicalHeight() - negativeYcameraOffset;
 
-	if (engine->camera.target->worldY < topLimit)
-		engine->camera.y -= (topLimit - engine->camera.target->worldY) * deltaTime * 10;
+	if (renderer->camera.target->worldY < topLimit)
+		renderer->camera.y -= (topLimit - renderer->camera.target->worldY) * deltaTime * 10;
 
-	if (engine->camera.target->worldY > bottomLimit)
-		engine->camera.y += (engine->camera.target->worldY - bottomLimit) * deltaTime * 10;
+	if (renderer->camera.target->worldY > bottomLimit)
+		renderer->camera.y += (renderer->camera.target->worldY - bottomLimit) * deltaTime * 10;
 }
 
 
@@ -73,7 +76,6 @@ bool Scene::isTileSolid(float worldX, float worldY, int width, int height)
 		isTileSolidAtPoint(worldX + width - 1, worldY) ||
 		isTileSolidAtPoint(worldX, worldY + height) ||
 		isTileSolidAtPoint(worldX + width - 1, worldY + height);
-
 }
 
 bool Scene::isTileSolidAtPoint(float worldX, float worldY)
@@ -91,20 +93,20 @@ bool Scene::isTileSolidAtPoint(float worldX, float worldY)
 
 void Scene::loadTilemap()
 {
-	tilemap.push_back(importSprite("./Sprites/sky.tspr"));
+	tilemap.push_back(importSpriteFromBinary("./Sprites/sky"));
 	tilemapPhysics.push_back(0);
-	tilemap.push_back(importSprite("./Sprites/ground.tspr"));
+	tilemap.push_back(importSpriteFromBinary("./Sprites/ground"));
 	tilemapPhysics.push_back(1);
 }
 
-void Scene::setTilemapsOnPosition(ConsoleEngine* engine)
+void Scene::setTilemapsOnPosition(ConsoleRenderer* renderer)
 {
 	for (size_t y = 0; y < tilesStructure.size(); y++)
 	{
 		for (size_t x = 0; x < tilesStructure[y].size(); x++)
 		{
 			size_t spriteIndex = tilesStructure[y][x];
-			engine->drawSprite(tilemap[spriteIndex], tilemap[spriteIndex]->width * x, tilemap[spriteIndex]->height * y);
+			renderer->drawSprite(tilemap[spriteIndex].get(), tilemap[spriteIndex]->width * x, tilemap[spriteIndex]->height * y);
 		}
 	}
 }

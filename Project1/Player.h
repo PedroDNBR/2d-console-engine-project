@@ -11,5 +11,7 @@ public:
 protected:
     bool isGrounded = false;
     float yVelocity = 0.0f;
+	int currentFrameIndex = 0;
+    float animationWalkCycleTimer;
 };
 

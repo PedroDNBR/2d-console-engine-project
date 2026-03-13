@@ -1,0 +1,34 @@
+#pragma once
+#include "Window.h"
+#include <vector>
+#include <chrono>
+#include "Sprite.h"
+#include "Scene.h"
+#include "Camera.h"
+
+class ConsoleRenderer
+{
+private:
+    HANDLE handle;
+    int logicalWidth, logicalHeight;
+    int realWidth, realHeight;
+    std::vector<CHAR_INFO> buffer;
+    SMALL_RECT rect;
+
+public:
+    Camera camera;
+
+    ConsoleRenderer(int w, int h);
+    void drawPixel(int x, int y, wchar_t ch, WORD color);
+    void drawSprite(const Sprite* sprite, float worldX, float worldY, bool flip = false);
+    bool isOnCamera(float worldX, float worldY, int w, int h);
+    void present();
+    void clear();
+
+    int getLogicalWidth() { return logicalWidth; }
+    int getLogicalHeight() { return logicalHeight; }
+
+    int getRealWidth() { return realWidth; }
+    int getRealHeight() { return realHeight; }
+};
+

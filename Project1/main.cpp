@@ -2,19 +2,11 @@
 #include "ConsoleEngine.h"
 
 int main() {
-    ConsoleEngine engine(206, 60);
+    ConsoleEngine engine;
 
-   std::vector<std::vector<int>> tile = {
-        { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-        { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-        { 0,0,0,0,0,1,0,0,1,0,0,0,0,0,0 },
-        { 1,1,1,1,1,1,1,1,1,1,1,0,1,1,1 },
-        { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
-    };
-
-    engine.currentScene = new Scene(tile);
-
-    engine.run();
+    engine.start();
+    engine.update();
+    engine.cleanup();
 
     std::cout << "Game Finished\n";
 }

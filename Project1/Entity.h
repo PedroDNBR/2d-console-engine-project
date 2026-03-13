@@ -7,7 +7,11 @@ class Entity
 public:
     Scene* scene;
 
-    Sprite* sprite;
+    const Sprite* currentFrame = nullptr;
+    std::vector<const Sprite*> frames;
+
+    bool flipSprite = false;
+
     float worldX, worldY;
 
     Entity(float posX, float posY) : worldX(posX), worldY(posY) {}
