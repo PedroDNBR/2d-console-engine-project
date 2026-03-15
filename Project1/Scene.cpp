@@ -11,11 +11,13 @@ void Scene::start(ConsoleRenderer* renderer)
 	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurowalk1")));
 	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurowalk2")));
 	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurowalk3")));
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurojump")));
 	mauro->currentFrame = spritesUsedInScene[0].get();  //apenas para teste
 	mauro->frames.push_back(spritesUsedInScene[0].get());  //apenas para teste
 	mauro->frames.push_back(spritesUsedInScene[1].get());  //apenas para teste
 	mauro->frames.push_back(spritesUsedInScene[2].get());  //apenas para teste
 	mauro->frames.push_back(spritesUsedInScene[3].get());  //apenas para teste
+	mauro->frames.push_back(spritesUsedInScene[4].get());  //apenas para teste
 
 	entities.push_back(std::move(mauro)); //apenas para teste
 	loadTilemap();

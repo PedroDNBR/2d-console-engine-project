@@ -39,7 +39,7 @@ void Player::update(float deltaTime)
 
         if(animationWalkCycleTimer >= 0.18f)
         {
-            animationWalkCycleTimer -= 0.18f;
+            animationWalkCycleTimer = 0;
             currentFrameIndex++;
             if (currentFrameIndex > 3)
                 currentFrameIndex = 1;
@@ -49,5 +49,8 @@ void Player::update(float deltaTime)
     {
         currentFrameIndex = 0;
     }
-    currentFrame = frames[currentFrameIndex];
+    if(isGrounded)
+        currentFrame = frames[currentFrameIndex];
+    else
+		currentFrame = frames[4];
 }
