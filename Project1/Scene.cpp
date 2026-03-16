@@ -51,23 +51,34 @@ void Scene::destroy()
 
 void Scene::CameraFollowTarget(ConsoleRenderer* renderer, float deltaTime)
 {
-	float leftLimit = renderer->camera.x + positiveXcameraOffset;
-	float rightLimit = renderer->camera.x + (renderer->getLogicalWidth() / 2) - negativeXcameraOffset;
+	float playerScreenX = (renderer->camera.target->worldX + (renderer->camera.target->currentFrame->width / 2)) - renderer->camera.x;
+	float playerScreenY = (renderer->camera.target->worldY + (renderer->camera.target->currentFrame->height / 2)) - renderer->camera.y;
 
-	if (renderer->camera.target->worldX > leftLimit && renderer->camera.x < ((tilesStructure[0].size() - 1) * tilemap[0]->width) - std::floor(renderer->getLogicalWidth() / 4.f) - negativeXcameraOffset)
-		renderer->camera.x = renderer->camera.target->worldX - std::floor(renderer->getLogicalWidth() / 4.f) - 9;
+	float leftMagin = renderer->getLogicalWidth() * .3f;
+	float rightMagin = renderer->getLogicalWidth() * .7f;
 
-	if (renderer->camera.target->worldX < rightLimit && renderer->camera.x - 1 > 0)
-		renderer->camera.x = renderer->camera.target->worldX - std::floor(renderer->getLogicalWidth() / 4.f) + 8;
+	if(playerScreenX < leftMagin)
+	{
+		renderer->camera.x += (playerScreenX - leftMagin) * deltaTime * 10;
+	}
+	else if(playerScreenX > rightMagin)
+	{
+		renderer->camera.x += (playerScreenX - rightMagin) * deltaTime * 10;
+	}
 
-	float topLimit = renderer->camera.y + positiveYcameraOffset;
-	float bottomLimit = renderer->camera.y + renderer->getLogicalHeight() - negativeYcameraOffset;
+	float topMagin = renderer->getLogicalHeight() * .3f;
+	float bottomMagin = renderer->getLogicalHeight() * .7f;
 
-	if (renderer->camera.target->worldY < topLimit)
-		renderer->camera.y -= (topLimit - renderer->camera.target->worldY) * deltaTime * 10;
+	if (playerScreenY < topMagin)
+		renderer->camera.y += (playerScreenY - topMagin) * deltaTime * 10;
 
-	if (renderer->camera.target->worldY > bottomLimit)
-		renderer->camera.y += (renderer->camera.target->worldY - bottomLimit) * deltaTime * 10;
+	if (playerScreenY > bottomMagin)
+		renderer->camera.y += (playerScreenY - bottomMagin) * deltaTime * 10;
+
+	renderer->drawPixel(leftMagin, topMagin, L'X', 0x0F);
+	renderer->drawPixel(leftMagin, bottomMagin, L'X', 0x0F);
+	renderer->drawPixel(rightMagin, topMagin, L'X', 0x0F);
+	renderer->drawPixel(rightMagin, bottomMagin, L'X', 0x0F);
 }
 
 

@@ -28,6 +28,7 @@ public:
     void present();
     void clear();
     void queueDraw(const Sprite* sprite, float worldX, float worldY, bool flip = false);
+    void handleResize();
 
     int getLogicalWidth() { return logicalWidth; }
     int getLogicalHeight() { return logicalHeight; }

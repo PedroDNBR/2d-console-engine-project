@@ -5,8 +5,11 @@ void Window::CreateGameWindow(HANDLE* handle, int x, int y)
 	CONSOLE_SCREEN_BUFFER_INFOEX info = { sizeof(info) };
 	GetConsoleScreenBufferInfoEx(*handle, &info);
 
-	info.dwSize.X = x;
-	info.dwSize.Y = y;
+	CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
+	GetConsoleScreenBufferInfo(*handle, &consoleScreenBufferInfo);
+
+	info.dwSize.X = consoleScreenBufferInfo.srWindow.Right - consoleScreenBufferInfo.srWindow.Left + 1;
+	info.dwSize.Y = consoleScreenBufferInfo.srWindow.Bottom - consoleScreenBufferInfo.srWindow.Top + 1;
 	info.srWindow = { 0, 0, (SHORT)(x - 1), (SHORT)(y - 1) };
 	SetConsoleScreenBufferInfoEx(*handle, &info);
 
@@ -24,4 +27,13 @@ void Window::CreateGameWindow(HANDLE* handle, int x, int y)
 	wcscpy_s(cfi.FaceName, L"Consolas");
 
 	SetCurrentConsoleFontEx(handle, FALSE, &cfi);
+}
+
+void Window::GetWindowSize(HANDLE* handle, int& width, int& height)
+{
+	CONSOLE_SCREEN_BUFFER_INFO consoleScreenBufferInfo;
+	GetConsoleScreenBufferInfo(*handle, &consoleScreenBufferInfo);
+
+	width = consoleScreenBufferInfo.srWindow.Right - consoleScreenBufferInfo.srWindow.Left + 1;
+	height = consoleScreenBufferInfo.srWindow.Bottom - consoleScreenBufferInfo.srWindow.Top + 1;
 }

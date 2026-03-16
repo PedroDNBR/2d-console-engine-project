@@ -4,10 +4,12 @@ ConsoleRenderer::ConsoleRenderer(int w, int h) : logicalWidth(w), logicalHeight(
 realWidth(w * 2), realHeight(h)
 {
     handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    Window::CreateGameWindow(&handle, realWidth, realHeight);
+    logicalWidth = realWidth / 2;
+    logicalHeight = realHeight;
     buffer.resize(realWidth * realHeight);
     rect = { 0, 0, (SHORT)(realWidth - 1), (SHORT)(realHeight - 1) };
-    Window::CreateGameWindow(&handle, realWidth, realHeight);
-    camera = { 0, 6, logicalWidth, logicalHeight };
+    camera = { 0, 0, logicalWidth, logicalHeight };
 }
 
 void ConsoleRenderer::clear()
@@ -21,6 +23,26 @@ void ConsoleRenderer::clear()
 void ConsoleRenderer::queueDraw(const Sprite* sprite, float worldX, float worldY, bool flip)
 {
 	spritesToRender.push_back(SpriteToRender{ sprite, worldX, worldY, flip });
+}
+
+void ConsoleRenderer::handleResize()
+{
+	int newWidth = 0, newHeight = 0;
+    Window::GetWindowSize(&handle, newWidth, newHeight);
+    if (realWidth != newWidth || realHeight != newHeight)
+    {
+		if (newHeight < 10) newHeight = 10;
+		if (newWidth < 20) newWidth = 20;
+        realWidth = newWidth;
+        realHeight = newHeight;
+        logicalWidth = realWidth / 2;
+        logicalHeight = realHeight;
+        buffer.resize(realWidth * realHeight);
+		rect.Right = (SHORT)(realWidth - 1);
+		rect.Bottom = (SHORT)(realHeight - 1);
+        camera.width = logicalWidth;
+        camera.height = logicalHeight;
+    }
 }
 
 void ConsoleRenderer::drawPixel(int x, int y, wchar_t ch, WORD color)

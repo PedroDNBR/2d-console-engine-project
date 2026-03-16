@@ -33,6 +33,7 @@ void ConsoleEngine::update()
         deltaTime = std::chrono::duration<float>(now - lastFrame).count();
         lastFrame = now;
 
+        renderer->handleResize();
         handleInput();
         renderer->clear();
         currentScene->update(renderer.get(), deltaTime);

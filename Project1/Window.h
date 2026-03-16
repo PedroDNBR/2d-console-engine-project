@@ -9,5 +9,6 @@ class Window
 {
 public:
 	static void CreateGameWindow(HANDLE* handle, int x, int y);
+	static void GetWindowSize(HANDLE* handle, int& width, int& height);
 };
 
