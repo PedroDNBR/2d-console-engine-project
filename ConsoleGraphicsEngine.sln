@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35219.272
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Project1", "Project1\Project1.vcxproj", "{5197DB70-8D5B-4487-A36A-E28E8A6CA682}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleGraphicsEngine", "ConsoleGraphicsEngine\ConsoleGraphicsEngine.vcxproj", "{5197DB70-8D5B-4487-A36A-E28E8A6CA682}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

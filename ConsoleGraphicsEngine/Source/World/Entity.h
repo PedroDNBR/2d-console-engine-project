@@ -1,5 +1,5 @@
 #pragma once
-#include "Sprite.h"
+#include "../Sprite/Sprite.h"
 class Scene;
 
 class Entity

@@ -2,10 +2,10 @@
 #include "Window.h"
 #include <vector>
 #include <chrono>
-#include "Sprite.h"
-#include "Scene.h"
-#include "Camera.h"
-#include "SpriteToRender.h"
+#include "../Sprite/Sprite.h"
+#include "../World/Scene.h"
+#include "../World/Camera.h"
+#include "../Sprite/SpriteToRender.h"
 
 class ConsoleRenderer
 {

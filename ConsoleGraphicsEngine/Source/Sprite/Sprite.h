@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "Pixel.h"
+#include "../Sprite/Pixel.h"
 
 class Sprite
 {

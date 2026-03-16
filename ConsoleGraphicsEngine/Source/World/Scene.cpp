@@ -1,17 +1,17 @@
 ﻿#include "Scene.h"
-#include "SpriteImporter.h"
-#include "ConsoleEngine.h"
+#include "../Sprite/SpriteImporter.h"
+#include "../Core/ConsoleEngine.h"
 #include <iostream>
 
 void Scene::start(ConsoleRenderer* renderer)
 {
 	std::unique_ptr<Player> mauro = std::make_unique<Player>(54, 30);
 
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/mauro")));
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurowalk1")));
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurowalk2")));
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurowalk3")));
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Sprites/maurojump")));
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/mauro")));
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/maurowalk1")));
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/maurowalk2")));
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/maurowalk3")));
+	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/maurojump")));
 	mauro->currentFrame = spritesUsedInScene[0].get();  //apenas para teste
 	mauro->frames.push_back(spritesUsedInScene[0].get());  //apenas para teste
 	mauro->frames.push_back(spritesUsedInScene[1].get());  //apenas para teste
@@ -54,8 +54,8 @@ void Scene::CameraFollowTarget(ConsoleRenderer* renderer, float deltaTime)
 	float playerScreenX = (renderer->camera.target->worldX + (renderer->camera.target->currentFrame->width / 2)) - renderer->camera.x;
 	float playerScreenY = (renderer->camera.target->worldY + (renderer->camera.target->currentFrame->height / 2)) - renderer->camera.y;
 
-	float leftMagin = renderer->getLogicalWidth() * .3f;
-	float rightMagin = renderer->getLogicalWidth() * .7f;
+	float leftMagin = renderer->getLogicalWidth() * .4f;
+	float rightMagin = renderer->getLogicalWidth() * .6f;
 
 	if(playerScreenX < leftMagin)
 	{
@@ -74,11 +74,6 @@ void Scene::CameraFollowTarget(ConsoleRenderer* renderer, float deltaTime)
 
 	if (playerScreenY > bottomMagin)
 		renderer->camera.y += (playerScreenY - bottomMagin) * deltaTime * 10;
-
-	renderer->drawPixel(leftMagin, topMagin, L'X', 0x0F);
-	renderer->drawPixel(leftMagin, bottomMagin, L'X', 0x0F);
-	renderer->drawPixel(rightMagin, topMagin, L'X', 0x0F);
-	renderer->drawPixel(rightMagin, bottomMagin, L'X', 0x0F);
 }
 
 
@@ -106,9 +101,9 @@ bool Scene::isTileSolidAtPoint(float worldX, float worldY)
 
 void Scene::loadTilemap()
 {
-	tilemap.push_back(importSpriteFromBinary("./Sprites/sky"));
+	tilemap.push_back(importSpriteFromBinary("./Assets/Sprites/sky"));
 	tilemapPhysics.push_back(0);
-	tilemap.push_back(importSpriteFromBinary("./Sprites/ground"));
+	tilemap.push_back(importSpriteFromBinary("./Assets/Sprites/ground"));
 	tilemapPhysics.push_back(1);
 }
 

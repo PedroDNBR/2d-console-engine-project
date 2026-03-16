@@ -1,5 +1,5 @@
 #include "Player.h"
-#include "Scene.h"
+#include "../World/Scene.h"
 
 void Player::update(float deltaTime)
 {

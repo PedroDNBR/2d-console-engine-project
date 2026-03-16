@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
-#include "Sprite.h"
-#include "Entity.h"
-#include "Player.h"
+#include "../Sprite/Sprite.h"
+#include "../World/Entity.h"
+#include "../Game/Player.h"
 #include <memory>
 class ConsoleRenderer;
 

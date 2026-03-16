@@ -1,10 +1,10 @@
 #include <windows.h>
 #include <vector>
 #include <chrono>
-#include "Sprite.h"
-#include "Scene.h"
-#include "Camera.h"
-#include "ConsoleRenderer.h"
+#include "../Sprite/Sprite.h"
+#include "../World/Scene.h"
+#include "../World/Camera.h"
+#include "../Core/ConsoleRenderer.h"
 
 class ConsoleEngine {
 private:

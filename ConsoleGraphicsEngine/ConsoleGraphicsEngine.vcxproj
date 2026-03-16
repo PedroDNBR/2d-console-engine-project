@@ -24,7 +24,7 @@
     <ProjectGuid>{5197db70-8d5b-4487-a36a-e28e8a6ca682}</ProjectGuid>
     <RootNamespace>Project1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>2dConsoleEngine</ProjectName>
+    <ProjectName>ConsoleGraphicsEngine</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -128,28 +128,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ConsoleEngine.cpp" />
-    <ClCompile Include="ConsoleRenderer.cpp" />
-    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Source/Core/ConsoleEngine.cpp" />
+    <ClCompile Include="Source/Core/ConsoleRenderer.cpp" />
+    <ClCompile Include="Source/World/Entity.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Sprite.cpp" />
-    <ClCompile Include="SpriteImporter.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Source/Game/Player.cpp" />
+    <ClCompile Include="Source/World/Scene.cpp" />
+    <ClCompile Include="Source/Sprite/Sprite.cpp" />
+    <ClCompile Include="Source/Sprite/SpriteImporter.cpp" />
+    <ClCompile Include="Source/Core/Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="ConsoleEngine.h" />
-    <ClInclude Include="ConsoleRenderer.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="Pixel.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="Sprite.h" />
-    <ClInclude Include="SpriteImporter.h" />
-    <ClInclude Include="SpriteToRender.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="Source/World/Camera.h" />
+    <ClInclude Include="Source/Core/ConsoleEngine.h" />
+    <ClInclude Include="Source/Core/ConsoleRenderer.h" />
+    <ClInclude Include="Source/World/Entity.h" />
+    <ClInclude Include="Source/Sprite/Pixel.h" />
+    <ClInclude Include="Source/Game/Player.h" />
+    <ClInclude Include="Source/World/Scene.h" />
+    <ClInclude Include="Source/Sprite/Sprite.h" />
+    <ClInclude Include="Source/Sprite/SpriteImporter.h" />
+    <ClInclude Include="Source/Sprite/SpriteToRender.h" />
+    <ClInclude Include="Source/Core/Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
