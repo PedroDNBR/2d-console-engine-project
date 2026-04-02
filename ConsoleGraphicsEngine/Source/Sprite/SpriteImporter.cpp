@@ -11,6 +11,7 @@ std::unique_ptr<Sprite> importSprite(const std::string& filename)
 	if (!inputFile.is_open())
 	{
 		std::cout << "Failed to open file: " << filename << std::endl;
+		throw std::exception("Failed to open file");
 		return std::make_unique<Sprite>(0, 0);
 	}
 
@@ -68,6 +69,7 @@ std::unique_ptr<Sprite> importSpriteFromBinary(const std::string& filename)
 	if (!inputFile.is_open())
 	{
 		std::cout << "Failed to open binary file: " << filename << std::endl;
+		throw std::exception("Failed to open binary file");
 		return std::make_unique<Sprite>(0, 0);
 	}
 

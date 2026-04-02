@@ -1,12 +1,12 @@
 #pragma once
 #include "../Sprite/Sprite.h"
-class Scene;
+
+struct EngineContext;
+class WorldContext;
 
 class Entity
 {
 public:
-    Scene* scene;
-
     const Sprite* currentFrame = nullptr;
     std::vector<const Sprite*> frames;
 
@@ -16,10 +16,15 @@ public:
 
     Entity(float posX, float posY) : worldX(posX), worldY(posY) {}
     
-    virtual void start();
-    virtual void update(float deltaTime);
-    virtual void destroy();
+    void start(const EngineContext& engineContext, const WorldContext& worldContext);
+    void update(const EngineContext& engineContext, const WorldContext& worldContext);
+    void fixedUpdate(const EngineContext& engineContext, const WorldContext& worldContext);
+    void destroy();
 
-    virtual void move(float x, float y);
+protected:
+    virtual void onStart(const EngineContext& engineContext, const WorldContext& worldContext) = 0;
+    virtual void onUpdate(const EngineContext& engineContext, const WorldContext& worldContext) = 0;
+    virtual void onFixedUpdate(const EngineContext& engineContext, const WorldContext& worldContext) = 0;
+    virtual void onDestroy() = 0;
 };
 

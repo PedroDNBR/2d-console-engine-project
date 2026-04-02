@@ -131,25 +131,42 @@
     <ClCompile Include="Source/Core/ConsoleEngine.cpp" />
     <ClCompile Include="Source/Core/ConsoleRenderer.cpp" />
     <ClCompile Include="Source/World/Entity.cpp" />
+    <ClCompile Include="Source/World/EntityManager.cpp" />
+    <ClCompile Include="Source/World/TilemapManager.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Source/Game/Player.cpp" />
+    <ClCompile Include="Source/Game/Scenes/World1n1.cpp" />
     <ClCompile Include="Source/World/Scene.cpp" />
     <ClCompile Include="Source/Sprite/Sprite.cpp" />
     <ClCompile Include="Source/Sprite/SpriteImporter.cpp" />
     <ClCompile Include="Source/Core/Window.cpp" />
+    <ClCompile Include="Source/Core/AssetManager.cpp" />
+    <ClCompile Include="Source/Core/InputManager.cpp" />
+    <ClCompile Include="Source/World/Context/WorldContext.cpp" />
+    <ClCompile Include="Source/Game/Player.cpp" />
+    <ClCompile Include="Source\World\CollisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source/World/Camera.h" />
     <ClInclude Include="Source/Core/ConsoleEngine.h" />
     <ClInclude Include="Source/Core/ConsoleRenderer.h" />
+    <ClInclude Include="Source/Core/ViewportInfo.h" />
     <ClInclude Include="Source/World/Entity.h" />
+    <ClInclude Include="Source/World/EntityManager.h" />
+    <ClInclude Include="Source/World/TilemapManager.h" />
+    <ClInclude Include="Source/World/Camera.h" />
     <ClInclude Include="Source/Sprite/Pixel.h" />
-    <ClInclude Include="Source/Game/Player.h" />
+    <ClInclude Include="Source/Game/Scenes/World1n1.h" />
     <ClInclude Include="Source/World/Scene.h" />
     <ClInclude Include="Source/Sprite/Sprite.h" />
     <ClInclude Include="Source/Sprite/SpriteImporter.h" />
     <ClInclude Include="Source/Sprite/SpriteToRender.h" />
     <ClInclude Include="Source/Core/Window.h" />
+    <ClInclude Include="Source/Core/AssetManager.h" />
+    <ClInclude Include="Source/Core/Context/EngineContext.h" />
+    <ClInclude Include="Source/Core/InputManager.h" />
+    <ClInclude Include="Source/Core/KeyCode.h" />
+    <ClInclude Include="Source/World/Context/WorldContext.h" />
+    <ClInclude Include="Source/Game/Player.h" />
+    <ClInclude Include="Source\World\CollisionManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

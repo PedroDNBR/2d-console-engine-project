@@ -1,47 +1,84 @@
 ﻿#include "ConsoleEngine.h"
 #include "Window.h"
 
-void ConsoleEngine::handleInput()
+void ConsoleEngine::run(std::unique_ptr<Scene> startingLevel)
 {
-    if (GetKeyState('P') & 0x8000) running = false;
+    start(std::move(startingLevel));
+    update();
+    cleanup();
 }
 
-void ConsoleEngine::start()
+void ConsoleEngine::handleInput()
 {
-    std::vector<std::vector<int>> tile = {
-     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-     { 0,0,0,0,0,1,0,0,1,0,0,0,0,0,0 },
-     { 1,1,1,1,1,1,1,1,1,1,1,0,1,1,1 },
-     { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
-    };
+    //if (GetKeyState('P') & 0x8000) running = false;
+}
 
-	renderer = std::make_unique<ConsoleRenderer>(206, 60);
-    currentScene = std::make_unique<Scene>(tile);
-
-    currentScene->start(renderer.get());
+void ConsoleEngine::start(std::unique_ptr<Scene> startingLevel)
+{
     lastFrame = std::chrono::steady_clock::now();
+    assetManager = std::make_unique<AssetManager>();
+    inputManager = std::make_unique<InputManager>();
+    engineContext = EngineContext{ 0, fixedDeltaTime, inputManager.get(), assetManager.get()};
+	renderer = std::make_unique<ConsoleRenderer>(206, 60);
+    currentScene = std::move(startingLevel);
+	viewportInfo = ViewportInfo{ renderer->getLogicalWidth(), renderer->getLogicalHeight() };
+    currentScene->start(viewportInfo, engineContext);
 }
 
 void ConsoleEngine::update()
 {
     while (isRunning())
     {
-        auto now = std::chrono::steady_clock::now();
-        deltaTime = std::chrono::duration<float>(now - lastFrame).count();
-        lastFrame = now;
+        HandleTime();
 
-        renderer->handleResize();
+        Camera& camera = currentScene->getCamera();
+
+        if (renderer->hasWindowResized())
+        {
+            viewportInfo = ViewportInfo{ renderer->getLogicalWidth(), renderer->getLogicalHeight() };
+            currentScene->handleResize(viewportInfo);
+        }
+        
+		engineContext.deltaTime = deltaTime;
+
         handleInput();
         renderer->clear();
-        currentScene->update(renderer.get(), deltaTime);
-        renderer->present();
+		int attempts = 0;
+        while (accumulator >= fixedDeltaTime && attempts < maxFixedUpdatesPerFrame)
+        {
+            currentScene->fixedUpdate(engineContext);
+            accumulator -= fixedDeltaTime;
+            attempts++;
+		}
+
+        currentScene->update(engineContext);
+        QueueSceneSpritesToDraw();
+        renderer->present(camera);
     }
+}
+
+void ConsoleEngine::QueueSceneSpritesToDraw()
+{
+    for (size_t i = 0; i < currentScene->getSpritesToRender().size(); i++)
+    {
+        renderer->queueDraw(
+            currentScene->getSpritesToRender()[i].sprite,
+            currentScene->getSpritesToRender()[i].worldX,
+            currentScene->getSpritesToRender()[i].worldY,
+            currentScene->getSpritesToRender()[i].flip
+        );
+    }
+}
+
+void ConsoleEngine::HandleTime()
+{
+    auto now = std::chrono::steady_clock::now();
+    deltaTime = std::chrono::duration<float>(now - lastFrame).count();
+    lastFrame = now;
+	accumulator += deltaTime;
 }
 
 void ConsoleEngine::cleanup()
 {
-    currentScene->destroy();
+    currentScene->destroy(engineContext);
 }

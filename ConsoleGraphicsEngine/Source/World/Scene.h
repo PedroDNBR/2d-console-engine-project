@@ -1,40 +1,43 @@
 #pragma once
 #include <vector>
-#include "../Sprite/Sprite.h"
-#include "../World/Entity.h"
-#include "../Game/Player.h"
 #include <memory>
-class ConsoleRenderer;
+#include "TilemapManager.h"
+#include "EntityManager.h"
+#include "../World/Camera.h"
+#include "../World/Entity.h"
+#include "../Sprite/SpriteToRender.h"
+#include "../Core/ViewportInfo.h"
+#include "../Core/Context/EngineContext.h"
+#include "Context/WorldContext.h"
+#include "../Core/AssetManager.h"
 
 class Scene
 {
 public:
-	Scene(std::vector<std::vector<int>> tilemap) : tilesStructure(tilemap) {}
-	void start(ConsoleRenderer* engine);
-	void update(ConsoleRenderer* engine, float deltaTime);
-	void destroy();
+	void start(ViewportInfo& info, EngineContext& engineContext);
+	void update(EngineContext& engineContext);
+	void fixedUpdate(EngineContext& engineContext);
+	void destroy(EngineContext& engineContext);
+	void handleResize(ViewportInfo& info);
 
-	bool isTileSolid(float worldX, float worldY, int width, int height);
-	bool isTileSolidAtPoint(float worldX, float worldY);
+	Camera& getCamera() { return camera; }
+
+	std::vector<SpriteToRender> getSpritesToRender();
 
 protected:
-	std::vector<std::unique_ptr<Entity>> entities;
-	std::vector<std::unique_ptr<Sprite>> spritesUsedInScene;
+	Camera camera;
 
-	std::vector<std::unique_ptr<Sprite>> tilemap;
-	std::vector<int> tilemapPhysics;
-	std::vector<std::vector<int>> tilesStructure;
+	virtual void onStart(ViewportInfo& viewportInfo, EngineContext& engineContext, WorldContext& worldContext) = 0;
+	virtual void onUpdate(EngineContext& engineContext, WorldContext& worldContext) = 0;
+	virtual void onFixedUpdate(EngineContext& engineContext, WorldContext& worldContext) = 0;
+	virtual void onDestroy(EngineContext& engineContext, WorldContext& worldContext) = 0;
+	virtual void onHandleResize(ViewportInfo& info) = 0;
 
-	const int positiveXcameraOffset = 60;
-	const int negativeXcameraOffset = 60;
-	const int positiveYcameraOffset = 10;
-	const int negativeYcameraOffset = 34;
-
-	void loadTilemap();
-
-	void setTilemapsOnPosition(ConsoleRenderer* engine);
-
-	void CameraFollowTarget(ConsoleRenderer* engine, float deltaTime);
-
+private:
+	std::unique_ptr<TilemapManager> tilemapManager;
+	std::unique_ptr<EntityManager> entityManager;
+	std::unique_ptr<WorldContext> worldContext;
+	std::unique_ptr<CollisionManager> collisionManager;
+	std::vector<SpriteToRender> spritesToRender;
 };
 

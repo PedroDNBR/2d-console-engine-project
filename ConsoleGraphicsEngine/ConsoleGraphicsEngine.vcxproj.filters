@@ -16,6 +16,15 @@
     <Filter Include="Source\Sprite">
       <UniqueIdentifier>{8cc0eb13-db64-447b-8804-9dcbd96e19e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Game\Scenes">
+      <UniqueIdentifier>{0730cb5d-352f-49e1-9975-c1e4296df470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\Context">
+      <UniqueIdentifier>{90a160f8-1e3b-4c9b-ab43-370515f7aedb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\World\Context">
+      <UniqueIdentifier>{9a1b5055-473d-49af-8a74-f426a751499b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source/Core/Window.cpp">
@@ -33,8 +42,11 @@
     <ClCompile Include="Source/World/Entity.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
-    <ClCompile Include="Source/Game/Player.cpp">
-      <Filter>Source\Game</Filter>
+    <ClCompile Include="Source/World/EntityManager.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
+    <ClCompile Include="Source/World/TilemapManager.cpp">
+      <Filter>Source\World</Filter>
     </ClCompile>
     <ClCompile Include="Source/Sprite/SpriteImporter.cpp">
       <Filter>Source\Sprite</Filter>
@@ -45,6 +57,22 @@
     <ClCompile Include="main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source/Game/Scenes/World1n1.cpp">
+      <Filter>Source\Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source/World/Context/WorldContext.cpp">
+      <Filter>Source\World\Context</Filter>
+    </ClCompile>
+    <ClCompile Include="Source/Core/InputManager.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source/Core/AssetManager.cpp">
+      <Filter>Source\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Source/Game/Player.cpp">
+      <Filter>Source\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\World\CollisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source/Core/Window.h">
@@ -56,17 +84,23 @@
     <ClInclude Include="Source/Core/ConsoleEngine.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source/Core/ViewportInfo.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Source/World/Camera.h">
       <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="Source/World/Entity.h">
       <Filter>Source\World</Filter>
     </ClInclude>
-    <ClInclude Include="Source/World/Scene.h">
+    <ClInclude Include="Source/World/EntityManager.h">
       <Filter>Source\World</Filter>
     </ClInclude>
-    <ClInclude Include="Source/Game/Player.h">
-      <Filter>Source\Game</Filter>
+    <ClInclude Include="Source/World/TilemapManager.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
+    <ClInclude Include="Source/World/Scene.h">
+      <Filter>Source\World</Filter>
     </ClInclude>
     <ClInclude Include="Source/Sprite/SpriteToRender.h">
       <Filter>Source\Sprite</Filter>
@@ -80,5 +114,27 @@
     <ClInclude Include="Source/Sprite/Pixel.h">
       <Filter>Source\Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="Source/Core/Context/EngineContext.h">
+      <Filter>Source\Core\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="Source/World/Context/WorldContext.h">
+      <Filter>Source\World\Context</Filter>
+    </ClInclude>
+    <ClInclude Include="Source/Core/InputManager.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source/Core/KeyCode.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source/Core/AssetManager.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source/Game/Scenes/World1n1.h">
+      <Filter>Source\Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source/Game/Player.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\World\CollisionManager.h" />
   </ItemGroup>
 </Project>

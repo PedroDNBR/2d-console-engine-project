@@ -3,7 +3,6 @@
 #include <vector>
 #include <chrono>
 #include "../Sprite/Sprite.h"
-#include "../World/Scene.h"
 #include "../World/Camera.h"
 #include "../Sprite/SpriteToRender.h"
 
@@ -18,17 +17,16 @@ private:
 
     std::vector<SpriteToRender> spritesToRender;
 
-public:
-    Camera camera;
+    void resizeWindow(int newWidth, int newHeight);
 
+public:
     ConsoleRenderer(int w, int h);
     void drawPixel(int x, int y, wchar_t ch, WORD color);
-    void drawSprite(const Sprite* sprite, float worldX, float worldY, bool flip = false);
-    bool isOnCamera(float worldX, float worldY, int w, int h);
-    void present();
+    void drawSprite(const Camera& camera, const Sprite* sprite, float worldX, float worldY, bool flip = false);
+    void present(const Camera& camera);
     void clear();
     void queueDraw(const Sprite* sprite, float worldX, float worldY, bool flip = false);
-    void handleResize();
+    bool hasWindowResized();
 
     int getLogicalWidth() { return logicalWidth; }
     int getLogicalHeight() { return logicalHeight; }

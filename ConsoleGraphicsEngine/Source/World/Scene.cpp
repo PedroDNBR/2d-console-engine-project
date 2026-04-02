@@ -1,120 +1,54 @@
 ﻿#include "Scene.h"
-#include "../Sprite/SpriteImporter.h"
-#include "../Core/ConsoleEngine.h"
 #include <iostream>
 
-void Scene::start(ConsoleRenderer* renderer)
+void Scene::start(ViewportInfo& info, EngineContext& engineContext)
 {
-	std::unique_ptr<Player> mauro = std::make_unique<Player>(54, 30);
-
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/mauro")));
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/maurowalk1")));
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/maurowalk2")));
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/maurowalk3")));
-	spritesUsedInScene.push_back(std::move(importSpriteFromBinary("./Assets/Sprites/maurojump")));
-	mauro->currentFrame = spritesUsedInScene[0].get();  //apenas para teste
-	mauro->frames.push_back(spritesUsedInScene[0].get());  //apenas para teste
-	mauro->frames.push_back(spritesUsedInScene[1].get());  //apenas para teste
-	mauro->frames.push_back(spritesUsedInScene[2].get());  //apenas para teste
-	mauro->frames.push_back(spritesUsedInScene[3].get());  //apenas para teste
-	mauro->frames.push_back(spritesUsedInScene[4].get());  //apenas para teste
-
-	entities.push_back(std::move(mauro)); //apenas para teste
-	loadTilemap();
-	renderer->camera.target = entities[0].get();
-
-	for (const auto& e : entities)
-	{
-		e->scene = this;
-		e->start();
-	}
+	entityManager = std::make_unique<EntityManager>();
+	tilemapManager = std::make_unique<TilemapManager>();
+	collisionManager = std::make_unique<CollisionManager>(*tilemapManager);
+	worldContext = std::make_unique<WorldContext>(*tilemapManager, * entityManager, *collisionManager);
+	camera = Camera{ 0, 0, info.width, info.height };
+	onStart(info, engineContext, *worldContext);
+	entityManager->start(engineContext, *worldContext);
 }
 
-void Scene::update(ConsoleRenderer* renderer, float deltaTime)
+void Scene::update(EngineContext& engineContext)
 {
-	setTilemapsOnPosition(renderer);
-	for (const auto& e : entities)
-	{
-		e->update(deltaTime);
-		if (e->currentFrame != nullptr)
-			renderer->queueDraw(e->currentFrame, e->worldX, e->worldY, e->flipSprite);
-	}
-	CameraFollowTarget(renderer, deltaTime);
+	onUpdate(engineContext, *worldContext);
+	entityManager->update(engineContext, *worldContext);
 }
 
-void Scene::destroy()
+void Scene::fixedUpdate(EngineContext& engineContext)
 {
-	spritesUsedInScene.clear();
-	tilemap.clear();
-	entities.clear();
+	onFixedUpdate(engineContext, *worldContext);
+	entityManager->fixedUpdate(engineContext, *worldContext);
 }
 
-void Scene::CameraFollowTarget(ConsoleRenderer* renderer, float deltaTime)
+void Scene::destroy(EngineContext& engineContext)
 {
-	float playerScreenX = (renderer->camera.target->worldX + (renderer->camera.target->currentFrame->width / 2)) - renderer->camera.x;
-	float playerScreenY = (renderer->camera.target->worldY + (renderer->camera.target->currentFrame->height / 2)) - renderer->camera.y;
-
-	float leftMagin = renderer->getLogicalWidth() * .4f;
-	float rightMagin = renderer->getLogicalWidth() * .6f;
-
-	if(playerScreenX < leftMagin)
-	{
-		renderer->camera.x += (playerScreenX - leftMagin) * deltaTime * 10;
-	}
-	else if(playerScreenX > rightMagin)
-	{
-		renderer->camera.x += (playerScreenX - rightMagin) * deltaTime * 10;
-	}
-
-	float topMagin = renderer->getLogicalHeight() * .3f;
-	float bottomMagin = renderer->getLogicalHeight() * .7f;
-
-	if (playerScreenY < topMagin)
-		renderer->camera.y += (playerScreenY - topMagin) * deltaTime * 10;
-
-	if (playerScreenY > bottomMagin)
-		renderer->camera.y += (playerScreenY - bottomMagin) * deltaTime * 10;
+	onDestroy(engineContext, *worldContext);
 }
 
+void Scene::onStart(ViewportInfo& viewportInfo, EngineContext& engineContext, WorldContext& worldContext) {}
+void Scene::onUpdate(EngineContext& engineContext, WorldContext& worldContext) {}
+void Scene::onDestroy(EngineContext& engineContext, WorldContext& worldContext) {}
 
-bool Scene::isTileSolid(float worldX, float worldY, int width, int height)
+void Scene::handleResize(ViewportInfo& info)
 {
-	return
-		isTileSolidAtPoint(worldX, worldY) ||
-		isTileSolidAtPoint(worldX + width - 1, worldY) ||
-		isTileSolidAtPoint(worldX, worldY + height) ||
-		isTileSolidAtPoint(worldX + width - 1, worldY + height);
+	camera.width = info.width;
+	camera.height = info.height;
+	onHandleResize(info);
 }
 
-bool Scene::isTileSolidAtPoint(float worldX, float worldY)
+std::vector<SpriteToRender> Scene::getSpritesToRender()
 {
-	int tileX = worldX / tilemap[0]->width;
-	int tileY = worldY / tilemap[0]->height;
+	spritesToRender.clear();
 
-	if (tileY < 0 || tileY >= tilesStructure.size()) return false;
-	if (tileX < 0 || tileX >= tilesStructure[tileY].size()) return false;
+	const auto& tilemapSprites = tilemapManager->getTilesSpritesVisibleOnCamera(camera);
+	const auto& entitiesSprites = entityManager->getEntitiesSpritesVisibleOnCamera(camera);
 
-	int tileIndex = tilesStructure[tileY][tileX];
+	spritesToRender.insert(spritesToRender.end(), tilemapSprites.begin(), tilemapSprites.end());
+	spritesToRender.insert(spritesToRender.end(), entitiesSprites.begin(), entitiesSprites.end());
 
-	return tilemapPhysics[tileIndex] == 1;
-}
-
-void Scene::loadTilemap()
-{
-	tilemap.push_back(importSpriteFromBinary("./Assets/Sprites/sky"));
-	tilemapPhysics.push_back(0);
-	tilemap.push_back(importSpriteFromBinary("./Assets/Sprites/ground"));
-	tilemapPhysics.push_back(1);
-}
-
-void Scene::setTilemapsOnPosition(ConsoleRenderer* renderer)
-{
-	for (size_t y = 0; y < tilesStructure.size(); y++)
-	{
-		for (size_t x = 0; x < tilesStructure[y].size(); x++)
-		{
-			size_t spriteIndex = tilesStructure[y][x];
-			renderer->queueDraw(tilemap[spriteIndex].get(), tilemap[spriteIndex]->width * x, tilemap[spriteIndex]->height * y);
-		}
-	}
+	return spritesToRender;
 }
