@@ -11,12 +11,16 @@ class Camera;
 class TilemapManager
 {
 public:
-	std::vector<Sprite*> tilemap;
-	std::vector<std::vector<int>> tilesStructure;
+	std::vector<Sprite*> backgroundTilemap;
+	std::vector<Sprite*> topTilemap;
+	std::vector<std::vector<int>> backgroundTilesStructure;
+	std::vector<std::vector<int>> topTilesStructure;
 
-	void loadTilesSprites(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths);
+	void loadTopTilesSprites(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths);
+	void loadBackgroundTilesSprites(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths);
 
-	std::vector<SpriteToRender>& getTilesSpritesVisibleOnCamera(const Camera& camera);
+	std::vector<SpriteToRender>& getTopTilesSpritesVisibleOnCamera(const Camera& camera);
+	std::vector<SpriteToRender>& getBackgroundTilesSpritesVisibleOnCamera(const Camera& camera);
 
 private:
 	std::vector<SpriteToRender> tilesSpritesVisibleOnCamera;

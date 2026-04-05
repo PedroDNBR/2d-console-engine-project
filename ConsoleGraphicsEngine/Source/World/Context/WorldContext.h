@@ -15,8 +15,9 @@ public:
 	
 	template<typename NewEntity>
 	NewEntity* createEntity(float posX, float posY);
-	void createTilemap(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths, std::vector<std::vector<int>> tileStructure);
-	void createTilemapCollision(std::vector<int> tilemapPhysics);
+	void createBackgroundTilemaps(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths, std::vector<std::vector<int>> tileStructure);
+	void createTopTilemaps(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths, std::vector<std::vector<int>> tileStructure);
+	void createTopTilemapsCollision(std::vector<int> tilemapPhysics);
 
 	bool isTileSolid(float worldX, float worldY, int width, int height) const;
 	bool isTileSolidAtPoint(float worldX, float worldY) const;

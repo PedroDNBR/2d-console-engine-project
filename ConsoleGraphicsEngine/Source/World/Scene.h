@@ -20,9 +20,13 @@ public:
 	void destroy(EngineContext& engineContext);
 	void handleResize(ViewportInfo& info);
 
-	Camera& getCamera() { return camera; }
+	std::vector<SpriteToRender> getEntitiesToRender();
 
-	std::vector<SpriteToRender> getSpritesToRender();
+	std::vector<SpriteToRender> getTopTilesToRender();
+
+	std::vector<SpriteToRender> getBackgroundTilesToRender();
+
+	Camera& getCamera() { return camera; }
 
 protected:
 	Camera camera;

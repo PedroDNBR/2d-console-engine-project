@@ -68,37 +68,36 @@ void Player::onUpdate(const EngineContext& engineContext, const WorldContext& wo
 
 void Player::onFixedUpdate(const EngineContext& engineContext, const WorldContext& worldContext)
 {
-    if (!isGrounded)
-        yVelocity += gravity * engineContext.fixedDeltaTime;
-
-    float newWorldX = worldX + movementX * playerSpeed * engineContext.fixedDeltaTime;
-    if (!worldContext.isTileSolid(newWorldX, worldY, currentFrame->width, currentFrame->height))
-    {
-        worldX = newWorldX;
-	}
-
+    isGrounded = worldContext.isTileSolidAtPoint(worldX, worldY + currentFrame->height + 1) ||
+        worldContext.isTileSolidAtPoint(worldX + currentFrame->width - 1, worldY + currentFrame->height + 1);
 
     float newWorldY = worldY + yVelocity * engineContext.fixedDeltaTime;
-    if (worldContext.isTileSolid(worldX, newWorldY, currentFrame->width, currentFrame->height))
+    if (worldContext.isTileSolid(worldX, newWorldY + 1, currentFrame->width, currentFrame->height))
     {
-        if (yVelocity > 0)
-        {
-			worldY = std::floor((newWorldY + currentFrame->height) / 16) * 16 - currentFrame->height;
-        }
         yVelocity = 0;
+		newWorldY = (int)((worldY + currentFrame->height) / currentFrame->height) * currentFrame->height - currentFrame->height - 1;
     }
     else
     {
         worldY = newWorldY;
     }
 
-    isGrounded = worldContext.isTileSolidAtPoint(worldX, worldY + currentFrame->height) ||
-        worldContext.isTileSolidAtPoint(worldX + currentFrame->width - 1, worldY + currentFrame->height);
+    float newWorldX = worldX + movementX * playerSpeed * engineContext.fixedDeltaTime;
+    if (!worldContext.isTileSolid(newWorldX, worldY, currentFrame->width, currentFrame->height))
+    {
+        worldX = newWorldX;
+    }
 
     if (isGrounded && jump)
     {
         yVelocity = -jumpForce;
     }
+    if(!isGrounded)
+    {
+        yVelocity += gravity * engineContext.fixedDeltaTime;
+        if (yVelocity > terminalVelocity)
+            yVelocity = terminalVelocity;
+	}
 
     jump = false;
 }

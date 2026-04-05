@@ -40,15 +40,18 @@ void Scene::handleResize(ViewportInfo& info)
 	onHandleResize(info);
 }
 
-std::vector<SpriteToRender> Scene::getSpritesToRender()
+std::vector<SpriteToRender> Scene::getEntitiesToRender()
 {
-	spritesToRender.clear();
+	return entityManager->getEntitiesSpritesVisibleOnCamera(camera);
+}
 
-	const auto& tilemapSprites = tilemapManager->getTilesSpritesVisibleOnCamera(camera);
-	const auto& entitiesSprites = entityManager->getEntitiesSpritesVisibleOnCamera(camera);
+std::vector<SpriteToRender> Scene::getTopTilesToRender()
+{
+	return tilemapManager->getTopTilesSpritesVisibleOnCamera(camera);
 
-	spritesToRender.insert(spritesToRender.end(), tilemapSprites.begin(), tilemapSprites.end());
-	spritesToRender.insert(spritesToRender.end(), entitiesSprites.begin(), entitiesSprites.end());
+}
 
-	return spritesToRender;
+std::vector<SpriteToRender> Scene::getBackgroundTilesToRender()
+{
+	return tilemapManager->getBackgroundTilesSpritesVisibleOnCamera(camera);
 }

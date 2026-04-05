@@ -9,11 +9,11 @@ public:
 	bool isTileSolid(float worldX, float worldY, int width, int height);
 	bool isTileSolidAtPoint(float worldX, float worldY);
 
-	void setTilemapPhysics(const std::vector<int>& physics) { tilemapPhysics = physics; }
+	void setTopTilemapPhysics(const std::vector<int>& physics) { topTilemapPhysics = physics; }
 
 private:
 	TilemapManager& tilemapManager;
 
-	std::vector<int> tilemapPhysics;
+	std::vector<int> topTilemapPhysics;
 };
 

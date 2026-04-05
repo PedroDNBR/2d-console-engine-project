@@ -2,15 +2,17 @@
 
 bool CollisionManager::isTileSolidAtPoint(float worldX, float worldY)
 {
-	int tileX = worldX / tilemapManager.tilemap[0]->width;
-	int tileY = worldY / tilemapManager.tilemap[0]->height;
+	int tileX = worldX / tilemapManager.topTilemap[0]->width;
+	int tileY = worldY / tilemapManager.topTilemap[0]->height;
 
-	if (tileY < 0 || tileY >= tilemapManager.tilesStructure.size()) return false;
-	if (tileX < 0 || tileX >= tilemapManager.tilesStructure[tileY].size()) return false;
+	if (tileY < 0 || tileY >= tilemapManager.topTilesStructure.size()) return false;
+	if (tileX < 0 || tileX >= tilemapManager.topTilesStructure[tileY].size()) return false;
 
-	int tileIndex = tilemapManager.tilesStructure[tileY][tileX];
+	int tileIndex = tilemapManager.topTilesStructure[tileY][tileX];
 
-	return tilemapPhysics[tileIndex] == 1;
+	if (tileIndex < 1) return 0;
+
+	return topTilemapPhysics[tileIndex - 1] == 1;
 }
 
 bool CollisionManager::isTileSolid(float worldX, float worldY, int width, int height)

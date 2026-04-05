@@ -59,13 +59,31 @@ void ConsoleEngine::update()
 
 void ConsoleEngine::QueueSceneSpritesToDraw()
 {
-    for (size_t i = 0; i < currentScene->getSpritesToRender().size(); i++)
+    for (size_t i = 0; i < currentScene->getBackgroundTilesToRender().size(); i++)
     {
         renderer->queueDraw(
-            currentScene->getSpritesToRender()[i].sprite,
-            currentScene->getSpritesToRender()[i].worldX,
-            currentScene->getSpritesToRender()[i].worldY,
-            currentScene->getSpritesToRender()[i].flip
+            currentScene->getBackgroundTilesToRender()[i].sprite,
+            currentScene->getBackgroundTilesToRender()[i].worldX,
+            currentScene->getBackgroundTilesToRender()[i].worldY,
+            currentScene->getBackgroundTilesToRender()[i].flip
+        );
+    }
+    for (size_t i = 0; i < currentScene->getTopTilesToRender().size(); i++)
+    {
+        renderer->queueDraw(
+            currentScene->getTopTilesToRender()[i].sprite,
+            currentScene->getTopTilesToRender()[i].worldX,
+            currentScene->getTopTilesToRender()[i].worldY,
+            currentScene->getTopTilesToRender()[i].flip
+        );
+    }
+    for (size_t i = 0; i < currentScene->getEntitiesToRender().size(); i++)
+    {
+        renderer->queueDraw(
+            currentScene->getEntitiesToRender()[i].sprite,
+            currentScene->getEntitiesToRender()[i].worldX,
+            currentScene->getEntitiesToRender()[i].worldY,
+            currentScene->getEntitiesToRender()[i].flip
         );
     }
 }

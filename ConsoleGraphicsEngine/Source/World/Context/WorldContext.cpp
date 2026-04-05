@@ -1,14 +1,20 @@
 #include "WorldContext.h"
 
-void WorldContext::createTilemap(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths, std::vector<std::vector<int>> tileStructure)
+void WorldContext::createBackgroundTilemaps(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths, std::vector<std::vector<int>> tileStructure)
 {
-	tilemapManager.loadTilesSprites(engineContext, spritesPaths);
-	tilemapManager.tilesStructure = tileStructure;
+	tilemapManager.loadBackgroundTilesSprites(engineContext, spritesPaths);
+	tilemapManager.backgroundTilesStructure = tileStructure;
 }
 
-void WorldContext::createTilemapCollision(std::vector<int> tilemapPhysics)
+void WorldContext::createTopTilemaps(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths, std::vector<std::vector<int>> tileStructure)
 {
-	collisionManager.setTilemapPhysics(tilemapPhysics);
+	tilemapManager.loadTopTilesSprites(engineContext, spritesPaths);
+	tilemapManager.topTilesStructure = tileStructure;
+}
+
+void WorldContext::createTopTilemapsCollision(std::vector<int> tilemapPhysics)
+{
+	collisionManager.setTopTilemapPhysics(tilemapPhysics);
 }
 
 bool WorldContext::isTileSolid(float worldX, float worldY, int width, int height) const

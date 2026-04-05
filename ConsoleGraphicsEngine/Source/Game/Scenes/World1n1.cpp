@@ -2,21 +2,34 @@
 
 void World1n1::onStart(ViewportInfo& viewportInfo, EngineContext& engineContext, WorldContext& worldContext)
 {
-	worldContext.createTilemap(
+	worldContext.createBackgroundTilemaps(
 		engineContext,
-		{ "./Assets/Sprites/sky", "./Assets/Sprites/ground" },
+		{ "./Assets/Sprites/sky" },
 		{
-			 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-			 { 0,0,0,0,0,0,0,1,0,0,0,0,0,0,0 },
-			 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-			 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
-			 { 0,0,0,0,0,1,0,0,1,0,0,0,0,0,0 },
-			 { 1,1,1,1,1,1,1,1,1,1,1,0,1,1,1 },
+			 { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+			 { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+			 { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+			 { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+			 { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+			 { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
 			 { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
 		}
 	);
-	worldContext.createTilemapCollision(
-		{ 0, 1 }
+	worldContext.createTopTilemaps(
+		engineContext,
+		{ "./Assets/Sprites/ground" },
+		{
+			 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+			 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+			 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+			 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+			 { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 },
+			 { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+			 { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 }
+		}
+	);
+	worldContext.createTopTilemapsCollision(
+		{ 1 }
 	);
 	player = worldContext.createEntity<Player>(10, 30);
 }
