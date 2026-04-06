@@ -59,31 +59,34 @@ void ConsoleEngine::update()
 
 void ConsoleEngine::QueueSceneSpritesToDraw()
 {
-    for (size_t i = 0; i < currentScene->getBackgroundTilesToRender().size(); i++)
+    auto backgroundTiles = currentScene->getBackgroundTilesToRender();
+    for (size_t i = 0; i < backgroundTiles.size(); i++)
     {
         renderer->queueDraw(
-            currentScene->getBackgroundTilesToRender()[i].sprite,
-            currentScene->getBackgroundTilesToRender()[i].worldX,
-            currentScene->getBackgroundTilesToRender()[i].worldY,
-            currentScene->getBackgroundTilesToRender()[i].flip
+            backgroundTiles[i].sprite,
+            backgroundTiles[i].worldX,
+            backgroundTiles[i].worldY,
+            backgroundTiles[i].flip
         );
     }
-    for (size_t i = 0; i < currentScene->getTopTilesToRender().size(); i++)
+    auto topTiles = currentScene->getTopTilesToRender();
+    for (size_t i = 0; i < topTiles.size(); i++)
     {
         renderer->queueDraw(
-            currentScene->getTopTilesToRender()[i].sprite,
-            currentScene->getTopTilesToRender()[i].worldX,
-            currentScene->getTopTilesToRender()[i].worldY,
-            currentScene->getTopTilesToRender()[i].flip
+            topTiles[i].sprite,
+            topTiles[i].worldX,
+            topTiles[i].worldY,
+            topTiles[i].flip
         );
     }
-    for (size_t i = 0; i < currentScene->getEntitiesToRender().size(); i++)
+    auto entitiesSprites = currentScene->getEntitiesToRender();
+    for (size_t i = 0; i < entitiesSprites.size(); i++)
     {
         renderer->queueDraw(
-            currentScene->getEntitiesToRender()[i].sprite,
-            currentScene->getEntitiesToRender()[i].worldX,
-            currentScene->getEntitiesToRender()[i].worldY,
-            currentScene->getEntitiesToRender()[i].flip
+            entitiesSprites[i].sprite,
+            entitiesSprites[i].worldX,
+            entitiesSprites[i].worldY,
+            entitiesSprites[i].flip
         );
     }
 }

@@ -5,11 +5,11 @@
 
 void Player::onStart(const EngineContext& engineContext, const WorldContext& worldContext)
 {
-    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/mauro"));
-    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/maurowalk1"));
-    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/maurowalk2"));
-    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/maurowalk3"));
-    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/maurojump"));
+    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/Player/mauro"));
+    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/Player/maurowalk1"));
+    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/Player/maurowalk2"));
+    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/Player/maurowalk3"));
+    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/Player/maurojump"));
 	currentFrame = frames[0];
 }
 

@@ -21,69 +21,51 @@ void TilemapManager::loadBackgroundTilesSprites(const EngineContext& engineConte
 
 std::vector<SpriteToRender>& TilemapManager::getTopTilesSpritesVisibleOnCamera(const Camera& camera)
 {
-	tilesSpritesVisibleOnCamera.clear();
+	return getTilesSpritesVisibleOnCameraFromVector(topTilesStructure, topTilemap, camera);
 
-	int tileStartX = std::floor(camera.x / 16);
-	int tileStartY = std::floor(camera.y / 16);
-
-	int tileEndX = std::ceil((camera.x + camera.width) / 16);
-	int tileEndY = std::ceil((camera.y + camera.height) / 16);
-
-	tileStartX = max(0, tileStartX);
-	tileStartY = max(0, tileStartY);
-	tileEndX = min(backgroundTilesStructure[0].size() - 1, tileEndX);
-	tileEndY = min(backgroundTilesStructure.size() - 1, tileEndY);
-
-	for (int y = tileStartY; y < tileEndY; y++)
-	{
-		for (int x = tileStartX; x < tileEndX; x++)
-		{
-			int tileIndex = topTilesStructure[y][x];
-			if (tileIndex < 1) continue;
-			tileIndex -= 1;
-			if (camera.isOnCamera(x * topTilemap[tileIndex]->width, y * topTilemap[tileIndex]->height, topTilemap[tileIndex]->width, topTilemap[tileIndex]->height))
-			{
-				SpriteToRender spriteToRenderTop;
-				spriteToRenderTop.sprite = topTilemap[tileIndex];
-				spriteToRenderTop.worldX = x * spriteToRenderTop.sprite->width;
-				spriteToRenderTop.worldY = y * spriteToRenderTop.sprite->height;
-				tilesSpritesVisibleOnCamera.push_back(spriteToRenderTop);
-			}
-		}
-	}
-
-	return tilesSpritesVisibleOnCamera;
 }
 
 std::vector<SpriteToRender>& TilemapManager::getBackgroundTilesSpritesVisibleOnCamera(const Camera& camera)
 {
+	return getTilesSpritesVisibleOnCameraFromVector(backgroundTilesStructure, backgroundTilemap, camera);
+}
+
+std::vector<SpriteToRender>& TilemapManager::getTilesSpritesVisibleOnCameraFromVector(const std::vector<std::vector<int>>& tileStructure, const std::vector<Sprite*>& tilemap, const Camera& camera)
+{
 	tilesSpritesVisibleOnCamera.clear();
 
-	int tileStartX = std::floor(camera.x / 16);
-	int tileStartY = std::floor(camera.y / 16);
+	int tileStartX = std::floor(camera.x / tileSize);
+	int tileStartY = std::floor(camera.y / tileSize);
 
-	int tileEndX = std::ceil((camera.x + camera.width) / 16);
-	int tileEndY = std::ceil((camera.y + camera.height) / 16);
+	int tileEndX = std::ceil((camera.x + camera.width) / tileSize);
+	int tileEndY = std::ceil((camera.y + camera.height) / tileSize);
 
 	tileStartX = max(0, tileStartX);
 	tileStartY = max(0, tileStartY);
-	tileEndX = min(backgroundTilesStructure[0].size() - 1, tileEndX);
-	tileEndY = min(backgroundTilesStructure.size() - 1, tileEndY);
+	tileEndX = min(tileStructure[0].size() - 1, tileEndX);
+	tileEndY = min(tileStructure.size() - 1, tileEndY);
 
-	for (int y = tileStartY; y < tileEndY; y++)
+	for (int y = tileStartY; y <= tileEndY; y++)
 	{
-		for (int x = tileStartX; x < tileEndX; x++)
+		for (int x = tileStartX; x <= tileEndX; x++)
 		{
-			int tileIndex = backgroundTilesStructure[y][x];
-			if (tileIndex < 1) continue;
-			tileIndex -= 1;
-			if (camera.isOnCamera(x * backgroundTilemap[tileIndex]->width, y * backgroundTilemap[tileIndex]->height, backgroundTilemap[tileIndex]->width, backgroundTilemap[tileIndex]->height))
+			bool flip = false;
+			int tileIndex = tileStructure[y][x];
+			if (tileIndex == 0) continue;
+			if (tileIndex < 0)
 			{
-				SpriteToRender spriteToRender;
-				spriteToRender.sprite = backgroundTilemap[tileIndex];
-				spriteToRender.worldX = x * spriteToRender.sprite->width;
-				spriteToRender.worldY = y * spriteToRender.sprite->height;
-				tilesSpritesVisibleOnCamera.push_back(spriteToRender);
+				tileIndex *= -1;
+				flip = true;
+			}
+			tileIndex -= 1;
+			if (camera.isOnCamera(x * tilemap[tileIndex]->width, y * tilemap[tileIndex]->height, tilemap[tileIndex]->width, tilemap[tileIndex]->height))
+			{
+				SpriteToRender spriteToRenderTop;
+				spriteToRenderTop.sprite = tilemap[tileIndex];
+				spriteToRenderTop.worldX = x * spriteToRenderTop.sprite->width;
+				spriteToRenderTop.worldY = y * spriteToRenderTop.sprite->height;
+				spriteToRenderTop.flip = flip;
+				tilesSpritesVisibleOnCamera.push_back(spriteToRenderTop);
 			}
 		}
 	}

@@ -9,7 +9,7 @@ public:
 private:
     bool jump = false;
     float movementX = 0;
-    float jumpForce = 100.f;
+    float jumpForce = 110.f;
     float playerSpeed = 30.f;
     float gravity = 120.f;
     const float terminalVelocity = 1000.f;

@@ -48,7 +48,6 @@ std::vector<SpriteToRender> Scene::getEntitiesToRender()
 std::vector<SpriteToRender> Scene::getTopTilesToRender()
 {
 	return tilemapManager->getTopTilesSpritesVisibleOnCamera(camera);
-
 }
 
 std::vector<SpriteToRender> Scene::getBackgroundTilesToRender()
