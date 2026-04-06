@@ -15,14 +15,7 @@ void Player::onStart(const EngineContext& engineContext, const WorldContext& wor
 
 void Player::onUpdate(const EngineContext& engineContext, const WorldContext& worldContext)
 {
-    
-
-
-    //    //if ((GetKeyState('W') & 0x8000) && isGrounded) yVelocity = -100.f;
-
-    //move(0, yVelocity * engineContext.deltaTime);
-
-    //bool isMoving = false;
+    bool isMoving = false;
 
     movementX = 0;
 
@@ -34,36 +27,36 @@ void Player::onUpdate(const EngineContext& engineContext, const WorldContext& wo
     if (engineContext.inputManager->getKey(KeyCode::KEY_A))
     {
         movementX = -1.f;
-        // isMoving = true;
-        //flipSprite = true;
+        isMoving = true;
+        flipSprite = true;
     }
     if (engineContext.inputManager->getKey(KeyCode::KEY_D))
     {
         movementX = 1.f;
-        //isMoving = true;
-        //flipSprite = false;
+        isMoving = true;
+        flipSprite = false;
     }
 
-    //if (isMoving)
-    //{
-    //    animationWalkCycleTimer += engineContext.deltaTime;
+    if (isMoving)
+    {
+        animationWalkCycleTimer += engineContext.deltaTime;
 
-    //    if (animationWalkCycleTimer >= 0.18f)
-    //    {
-    //        animationWalkCycleTimer = 0;
-    //        currentFrameIndex++;
-    //        if (currentFrameIndex > 3)
-    //            currentFrameIndex = 1;
-    //    }
-    //}
-    //else
-    //{
-    //    currentFrameIndex = 0;
-    //}
-    //if (isGrounded)
-    //    currentFrame = frames[currentFrameIndex];
-    //else
-    //    currentFrame = frames[4];
+        if (animationWalkCycleTimer >= 0.18f)
+        {
+            animationWalkCycleTimer = 0;
+            currentFrameIndex++;
+            if (currentFrameIndex > 3)
+                currentFrameIndex = 1;
+        }
+    }
+    else
+    {
+        currentFrameIndex = 0;
+    }
+    if (isGrounded)
+        currentFrame = frames[currentFrameIndex];
+    else
+        currentFrame = frames[4];
 }
 
 void Player::onFixedUpdate(const EngineContext& engineContext, const WorldContext& worldContext)
