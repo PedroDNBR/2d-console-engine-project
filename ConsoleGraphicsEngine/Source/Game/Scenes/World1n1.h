@@ -1,6 +1,7 @@
 #pragma once
 #include "../../World/Scene.h"
 #include "../Player.h"
+#include "../Entities/Enemies/Goomba.h"
 
 class World1n1 : public Scene
 {

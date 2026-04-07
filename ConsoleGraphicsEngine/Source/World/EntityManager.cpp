@@ -1,6 +1,8 @@
 #include "EntityManager.h"
 #include "../Sprite/SpriteImporter.h"
 #include "Camera.h"
+#include <algorithm>
+#include <iterator>
 
 void EntityManager::start(const EngineContext& engineContext, const WorldContext& worldContext)
 {
@@ -44,4 +46,38 @@ std::vector<SpriteToRender>& EntityManager::getEntitiesSpritesVisibleOnCamera(co
 	}
 
 	return entitiesSpritesVisibleOnCamera;
+}
+
+Entity* EntityManager::getEntityByTag(uint16_t targetTag)
+{
+	auto iterator = std::find_if(
+		entities.begin(),
+		entities.end(),
+		[targetTag](const std::unique_ptr<Entity>& entity) {
+			return entity->tag == targetTag;
+		}
+	);
+
+	if(iterator != entities.end())
+		return iterator->get();
+
+	return nullptr;
+}
+
+std::vector<Entity*> EntityManager::getAllEntitiesByTag(uint16_t targetTag)
+{
+	std::vector<Entity*> result;
+	for (const auto& entity : entities)
+	{
+		if (entity->tag == targetTag)
+			result.push_back(entity.get()); // extrai o raw pointer aqui
+	}
+	return result;
+}
+
+float EntityManager::getDistanceBetweenEntities(const Entity& entityA, const Entity& entityB)
+{
+	float deltaX = entityA.worldX - entityB.worldX;
+	float deltaY = entityA.worldY - entityB.worldY;
+	return sqrt(deltaX * deltaX + deltaY * deltaY);
 }

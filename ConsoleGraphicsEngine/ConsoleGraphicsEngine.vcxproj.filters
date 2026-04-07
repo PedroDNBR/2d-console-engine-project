@@ -25,6 +25,12 @@
     <Filter Include="Source\World\Context">
       <UniqueIdentifier>{9a1b5055-473d-49af-8a74-f426a751499b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Game\Entities">
+      <UniqueIdentifier>{617fcfe9-b731-45b9-bca4-a3309fb3a497}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Game\Entities\Enemies">
+      <UniqueIdentifier>{734a8bb6-500c-4b51-a910-638c0dabceba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source/Core/Window.cpp">
@@ -72,7 +78,12 @@
     <ClCompile Include="Source/Game/Player.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Source\World\CollisionManager.cpp" />
+    <ClCompile Include="Source\Game\Entities\Enemies\Goomba.cpp">
+      <Filter>Source\Game\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\World\CollisionManager.cpp">
+      <Filter>Source\World</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source/Core/Window.h">
@@ -135,6 +146,11 @@
     <ClInclude Include="Source/Game/Player.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Source\World\CollisionManager.h" />
+    <ClInclude Include="Source\Game\Entities\Enemies\Goomba.h">
+      <Filter>Source\Game\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\World\CollisionManager.h">
+      <Filter>Source\World</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

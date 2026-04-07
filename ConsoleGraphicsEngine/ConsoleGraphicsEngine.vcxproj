@@ -159,6 +159,7 @@
     <ClCompile Include="Source/Core/InputManager.cpp" />
     <ClCompile Include="Source/World/Context/WorldContext.cpp" />
     <ClCompile Include="Source/Game/Player.cpp" />
+    <ClCompile Include="Source\Game\Entities\Enemies\Goomba.cpp" />
     <ClCompile Include="Source\World\CollisionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +183,7 @@
     <ClInclude Include="Source/Core/KeyCode.h" />
     <ClInclude Include="Source/World/Context/WorldContext.h" />
     <ClInclude Include="Source/Game/Player.h" />
+    <ClInclude Include="Source\Game\Entities\Enemies\Goomba.h" />
     <ClInclude Include="Source\World\CollisionManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -27,4 +27,17 @@ bool WorldContext::isTileSolidAtPoint(float worldX, float worldY) const
 	return collisionManager.isTileSolidAtPoint(worldX, worldY);
 }
 
+Entity* WorldContext::getEntityByTag(uint16_t targetTag) const
+{
+	return entityManager.getEntityByTag(targetTag);
+}
+std::vector<Entity*> WorldContext::getAllEntitiesByTag(uint16_t targetTag) const
+{
+	return entityManager.getAllEntitiesByTag(targetTag);
+}
+float WorldContext::getDistanceBetweenEntities(const Entity& entityA, const Entity& entityB) const
+{
+	return entityManager.getDistanceBetweenEntities(entityA, entityB);
+}
+
 

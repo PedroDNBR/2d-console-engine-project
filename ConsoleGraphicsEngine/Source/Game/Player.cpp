@@ -2,7 +2,6 @@
 #include "../World/Scene.h"
 #include "../Core/InputManager.h"
 
-
 void Player::onStart(const EngineContext& engineContext, const WorldContext& worldContext)
 {
     frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/Player/mauro"));

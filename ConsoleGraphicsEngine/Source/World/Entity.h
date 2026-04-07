@@ -21,6 +21,8 @@ public:
     void fixedUpdate(const EngineContext& engineContext, const WorldContext& worldContext);
     void destroy();
 
+	uint16_t tag = 0; // Pode ser usado para categorizar entidades, como "player", "enemy", etc.
+
 protected:
     virtual void onStart(const EngineContext& engineContext, const WorldContext& worldContext) = 0;
     virtual void onUpdate(const EngineContext& engineContext, const WorldContext& worldContext) = 0;

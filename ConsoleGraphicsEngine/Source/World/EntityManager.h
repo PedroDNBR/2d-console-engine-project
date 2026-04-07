@@ -19,6 +19,11 @@ public:
 	NewEntity* createEntity(float posX, float posY);
 	std::vector<SpriteToRender>& getEntitiesSpritesVisibleOnCamera(const Camera& camera);
 
+	Entity* getEntityByTag(uint16_t targetTag);
+	std::vector<Entity*> getAllEntitiesByTag(uint16_t targetTag);
+	float getDistanceBetweenEntities(const Entity& entityA, const Entity& entityB);
+
+
 private:
 	std::vector<SpriteToRender> entitiesSpritesVisibleOnCamera;
 };

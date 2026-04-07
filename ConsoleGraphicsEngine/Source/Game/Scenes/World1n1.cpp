@@ -58,7 +58,9 @@ void World1n1::onStart(ViewportInfo& viewportInfo, EngineContext& engineContext,
 	worldContext.createTopTilemapsCollision(
 		{ 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0 }
 	);
-	player = worldContext.createEntity<Player>(10, 30);
+	player = worldContext.createEntity<Player>(10, 128);
+	player->tag = 1;
+	worldContext.createEntity<Goomba>(240, 128);
 }
 
 void World1n1::onUpdate(EngineContext& engineContext, WorldContext& worldContext)

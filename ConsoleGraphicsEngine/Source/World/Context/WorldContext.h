@@ -22,6 +22,10 @@ public:
 	bool isTileSolid(float worldX, float worldY, int width, int height) const;
 	bool isTileSolidAtPoint(float worldX, float worldY) const;
 
+	Entity* getEntityByTag(uint16_t targetTag) const;
+	std::vector<Entity*> getAllEntitiesByTag(uint16_t targetTag) const;
+	float getDistanceBetweenEntities(const Entity& entityA, const Entity& entityB) const;
+
 };
 
 template<typename NewEntity>
