@@ -10,7 +10,7 @@ private:
     const float terminalVelocity = 1000.f;
     float yVelocity = 0.0f;
     float movementX = 0;
-    float jumpForce = 110.f;
+    float jumpForce = 90.f;
     float playerSpeed = 30.f;
     float gravity = 120.f;
     float animationWalkCycleTimer = 0;

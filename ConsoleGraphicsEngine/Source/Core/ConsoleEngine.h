@@ -7,6 +7,9 @@
 #include "../World/Scene.h"
 #include "../World/Camera.h"
 #include "../Core/ConsoleRenderer.h"
+#ifdef _DEBUG
+#include "../Core/DebugDraw.h"
+#endif
 #include "AssetManager.h"
 
 class ConsoleEngine {
@@ -19,6 +22,10 @@ private:
     std::unique_ptr<ConsoleRenderer> renderer;
     std::unique_ptr<InputManager> inputManager;
 	std::unique_ptr<AssetManager> assetManager;
+#ifdef _DEBUG
+    std::unique_ptr<DebugDraw> debugDraw;
+#endif
+
     bool isRunning() const { return running; }
     void handleInput();
     void start(std::unique_ptr<Scene> startingLevel);

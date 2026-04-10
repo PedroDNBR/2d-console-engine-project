@@ -183,6 +183,7 @@
     <ClInclude Include="Source/Core/KeyCode.h" />
     <ClInclude Include="Source/World/Context/WorldContext.h" />
     <ClInclude Include="Source/Game/Player.h" />
+    <ClInclude Include="Source\Core\DebugDraw.h" />
     <ClInclude Include="Source\Game\Entities\Enemies\Goomba.h" />
     <ClInclude Include="Source\World\CollisionManager.h" />
   </ItemGroup>

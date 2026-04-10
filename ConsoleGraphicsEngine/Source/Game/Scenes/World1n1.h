@@ -20,6 +20,8 @@ private:
 
 	Player* player;
 
+	std::vector<Goomba*> goombas;
+
 	int cameraFollowSpeed = 30;
 
 	void CameraFollowTarget(Entity* targetEntity, Camera&, float fixedDeltaTime);

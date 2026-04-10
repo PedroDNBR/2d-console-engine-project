@@ -152,5 +152,8 @@
     <ClInclude Include="Source\World\CollisionManager.h">
       <Filter>Source\World</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\DebugDraw.h">
+      <Filter>Source\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

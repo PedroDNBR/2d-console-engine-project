@@ -23,3 +23,35 @@ bool CollisionManager::isTileSolid(float worldX, float worldY, int width, int he
 		isTileSolidAtPoint(worldX, worldY + height - 1) ||
 		isTileSolidAtPoint(worldX + width - 1, worldY + height - 1);
 }
+
+Entity* CollisionManager::collidedWithEntity(float worldX, float worldY, int width, int height)
+{
+	for (int i = 0; i < entityManager.entities.size(); i++)
+	{
+		Entity* entity = entityManager.entities[i].get();
+		if (entity->worldX < worldX + width &&
+			entity->worldX + entity->currentFrame->width > worldX &&
+			entity->worldY < worldY + height &&
+			entity->worldY + entity->currentFrame->height > worldY)
+		{
+			return entity;
+		}
+	}
+	return nullptr;
+}
+
+Entity* CollisionManager::collidedWithEntityAtPoint(float worldXMin, float worldXMax, float worldYMin, float worldYMax)
+{
+	for (int i = 0; i < entityManager.entities.size(); i++)
+	{
+		Entity* entity = entityManager.entities[i].get();
+		if( entity->worldX < worldXMax &&
+			entity->worldX + entity->currentFrame->width > worldXMin &&
+			entity->worldY < worldYMax &&
+			entity->worldY + entity->currentFrame->height > worldYMin)
+		{
+			return entity;
+		}
+	}
+	return nullptr;
+}

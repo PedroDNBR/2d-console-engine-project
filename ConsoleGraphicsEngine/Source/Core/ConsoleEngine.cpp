@@ -18,7 +18,17 @@ void ConsoleEngine::start(std::unique_ptr<Scene> startingLevel)
     lastFrame = std::chrono::steady_clock::now();
     assetManager = std::make_unique<AssetManager>();
     inputManager = std::make_unique<InputManager>();
-    engineContext = EngineContext{ 0, fixedDeltaTime, inputManager.get(), assetManager.get()};
+#ifdef _DEBUG
+	 debugDraw = std::make_unique<DebugDraw>();
+#endif
+    engineContext = EngineContext
+    { 
+        0, fixedDeltaTime, 
+        inputManager.get(), assetManager.get()
+#ifdef _DEBUG
+     , debugDraw.get()
+#endif
+    };
 	renderer = std::make_unique<ConsoleRenderer>(206, 60);
     currentScene = std::move(startingLevel);
 	viewportInfo = ViewportInfo{ renderer->getLogicalWidth(), renderer->getLogicalHeight() };
@@ -62,7 +72,7 @@ void ConsoleEngine::QueueSceneSpritesToDraw()
     auto backgroundTiles = currentScene->getBackgroundTilesToRender();
     for (size_t i = 0; i < backgroundTiles.size(); i++)
     {
-        renderer->queueDraw(
+        renderer->queueSpriteDraw(
             backgroundTiles[i].sprite,
             backgroundTiles[i].worldX,
             backgroundTiles[i].worldY,
@@ -72,7 +82,7 @@ void ConsoleEngine::QueueSceneSpritesToDraw()
     auto topTiles = currentScene->getTopTilesToRender();
     for (size_t i = 0; i < topTiles.size(); i++)
     {
-        renderer->queueDraw(
+        renderer->queueSpriteDraw(
             topTiles[i].sprite,
             topTiles[i].worldX,
             topTiles[i].worldY,
@@ -82,13 +92,23 @@ void ConsoleEngine::QueueSceneSpritesToDraw()
     auto entitiesSprites = currentScene->getEntitiesToRender();
     for (size_t i = 0; i < entitiesSprites.size(); i++)
     {
-        renderer->queueDraw(
+        renderer->queueSpriteDraw(
             entitiesSprites[i].sprite,
             entitiesSprites[i].worldX,
             entitiesSprites[i].worldY,
             entitiesSprites[i].flip
         );
     }
+
+#ifdef _DEBUG
+    if (engineContext.debugDraw != nullptr)
+    {
+        for (const auto& debugPixel : engineContext.debugDraw->debugPixels)
+            renderer->queuePixelDraw(debugPixel.x, debugPixel.y, debugPixel.ch, debugPixel.color);
+
+        engineContext.debugDraw->debugPixels.clear();
+    }
+#endif
 }
 
 void ConsoleEngine::HandleTime()

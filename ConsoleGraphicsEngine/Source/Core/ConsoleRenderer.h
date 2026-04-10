@@ -5,6 +5,9 @@
 #include "../Sprite/Sprite.h"
 #include "../World/Camera.h"
 #include "../Sprite/SpriteToRender.h"
+#ifdef _DEBUG
+#include "../Core/DebugDraw.h"
+#endif
 
 class ConsoleRenderer
 {
@@ -16,6 +19,9 @@ private:
     SMALL_RECT rect;
 
     std::vector<SpriteToRender> spritesToRender;
+#ifdef _DEBUG
+    std::vector<DebugPixel> pixelsToRender;
+#endif
 
     void resizeWindow(int newWidth, int newHeight);
 
@@ -25,7 +31,10 @@ public:
     void drawSprite(const Camera& camera, const Sprite* sprite, float worldX, float worldY, bool flip = false);
     void present(const Camera& camera);
     void clear();
-    void queueDraw(const Sprite* sprite, float worldX, float worldY, bool flip = false);
+    void queueSpriteDraw(const Sprite* sprite, float worldX, float worldY, bool flip = false);
+#ifdef _DEBUG
+    void queuePixelDraw(int x, int y, wchar_t ch, int color);
+#endif
     bool hasWindowResized();
 
     int getLogicalWidth() { return logicalWidth; }

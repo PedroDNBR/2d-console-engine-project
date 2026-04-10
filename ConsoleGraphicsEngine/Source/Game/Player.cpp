@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "../World/Scene.h"
 #include "../Core/InputManager.h"
+#include "./Entities/Enemies/Goomba.h"
 
 void Player::onStart(const EngineContext& engineContext, const WorldContext& worldContext)
 {
@@ -60,6 +61,18 @@ void Player::onUpdate(const EngineContext& engineContext, const WorldContext& wo
 
 void Player::onFixedUpdate(const EngineContext& engineContext, const WorldContext& worldContext)
 {
+
+    Entity* collidedWith = worldContext.collidedWithEntityAtPoint(worldX + 4, worldX + (currentFrame->width - 4), worldY + currentFrame->height + 2, worldY + currentFrame->height + 2);
+    if (collidedWith != nullptr)
+    {
+        if (collidedWith->tag == 2)
+        {
+            dynamic_cast<Goomba*>(collidedWith)->Die();
+			yVelocity = -jumpForce / 1.5f;
+            return;
+        }
+    }
+
     isGrounded = worldContext.isTileSolidAtPoint(worldX, worldY + currentFrame->height + 1) ||
         worldContext.isTileSolidAtPoint(worldX + currentFrame->width - 1, worldY + currentFrame->height + 1);
 

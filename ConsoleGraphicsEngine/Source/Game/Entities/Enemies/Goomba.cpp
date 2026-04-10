@@ -1,9 +1,21 @@
 #include "Goomba.h"
 #include "../../../World/Scene.h"
+#ifdef _DEBUG
+#include "../../../Core/DebugDraw.h"
+#endif
+
+void Goomba::Die()
+{
+    if (!isAlive) return;
+    isAlive = false;
+    currentFrame = frames[1];
+    worldY += currentFrame->height;
+}
 
 void Goomba::onStart(const EngineContext& engineContext, const WorldContext& worldContext)
 {
     frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/Entties/Enemies/goomba"));
+    frames.push_back(&engineContext.assetManager->loadSprite("./Assets/Sprites/Entties/Enemies/goombaflat"));
 	currentFrame = frames[0];
 
     targetPlayer = worldContext.getEntityByTag(1);
@@ -11,6 +23,8 @@ void Goomba::onStart(const EngineContext& engineContext, const WorldContext& wor
 
 void Goomba::onUpdate(const EngineContext& engineContext, const WorldContext& worldContext)
 {
+    if (!isAlive) return;
+
     if (targetPlayer == nullptr)
     {
         targetPlayer = worldContext.getEntityByTag(1);
@@ -33,6 +47,8 @@ void Goomba::onUpdate(const EngineContext& engineContext, const WorldContext& wo
 
 void Goomba::onFixedUpdate(const EngineContext& engineContext, const WorldContext& worldContext)
 {
+    if (!isAlive) return;
+
     if (targetPlayer == nullptr)
         return;
 

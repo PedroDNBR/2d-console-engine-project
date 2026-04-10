@@ -5,6 +5,7 @@ class Goomba : public Entity
 {
 public:
     Goomba(float posX, float posY) : Entity(posX, posY) {}
+    void Die();
 
 private:
     const float terminalVelocity = 1000.f;
@@ -15,6 +16,7 @@ private:
     float goompaSpeed = 15;
     bool amIInSight = false;
     bool isGrounded = false;
+    bool isAlive = true;
 
 	Entity* targetPlayer;
 

@@ -20,10 +20,17 @@ void ConsoleRenderer::clear()
     }
 }
 
-void ConsoleRenderer::queueDraw(const Sprite* sprite, float worldX, float worldY, bool flip)
+void ConsoleRenderer::queueSpriteDraw(const Sprite* sprite, float worldX, float worldY, bool flip)
 {
 	spritesToRender.push_back(SpriteToRender{ sprite, worldX, worldY, flip });
 }
+
+#ifdef _DEBUG
+void ConsoleRenderer::queuePixelDraw(int x, int y, wchar_t ch, int color)
+{
+    pixelsToRender.push_back(DebugPixel{ x, y, ch, color });
+}
+#endif
 
 bool ConsoleRenderer::hasWindowResized()
 {
@@ -85,7 +92,14 @@ void ConsoleRenderer::present(const Camera& camera)
     for(const auto& s : spritesToRender)
 		drawSprite(camera, s.sprite, s.worldX, s.worldY, s.flip);
 
+#ifdef _DEBUG
+    for (const auto& p : pixelsToRender)
+        drawPixel(p.x -camera.x, p.y - camera.y, p.ch, static_cast<WORD>(p.color));
+#endif
     WriteConsoleOutput(handle, buffer.data(), { (SHORT)realWidth, (SHORT)realHeight }, { 0, 0 }, &rect);
 
     spritesToRender.clear();
+#ifdef _DEBUG
+    pixelsToRender.clear();
+#endif
 }

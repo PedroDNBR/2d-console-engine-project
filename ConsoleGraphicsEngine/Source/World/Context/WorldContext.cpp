@@ -27,14 +27,26 @@ bool WorldContext::isTileSolidAtPoint(float worldX, float worldY) const
 	return collisionManager.isTileSolidAtPoint(worldX, worldY);
 }
 
+Entity* WorldContext::collidedWithEntity(float worldX, float worldY, int width, int height) const
+{
+	return collisionManager.collidedWithEntity(worldX, worldY, width, height);
+}
+
 Entity* WorldContext::getEntityByTag(uint16_t targetTag) const
 {
 	return entityManager.getEntityByTag(targetTag);
 }
+
+Entity* WorldContext::collidedWithEntityAtPoint(float worldXMin, float worldXMax, float worldYMin, float worldYMax) const
+{
+	return collisionManager.collidedWithEntityAtPoint(worldXMin, worldXMax, worldYMin, worldYMax);
+}
+
 std::vector<Entity*> WorldContext::getAllEntitiesByTag(uint16_t targetTag) const
 {
 	return entityManager.getAllEntitiesByTag(targetTag);
 }
+
 float WorldContext::getDistanceBetweenEntities(const Entity& entityA, const Entity& entityB) const
 {
 	return entityManager.getDistanceBetweenEntities(entityA, entityB);

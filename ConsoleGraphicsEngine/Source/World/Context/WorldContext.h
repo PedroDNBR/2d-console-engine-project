@@ -23,9 +23,10 @@ public:
 	bool isTileSolidAtPoint(float worldX, float worldY) const;
 
 	Entity* getEntityByTag(uint16_t targetTag) const;
+	Entity* collidedWithEntity(float worldX, float worldY, int width, int height) const;
+	Entity* collidedWithEntityAtPoint(float worldXMin, float worldXMax, float worldYMin, float worldYMax) const;
 	std::vector<Entity*> getAllEntitiesByTag(uint16_t targetTag) const;
 	float getDistanceBetweenEntities(const Entity& entityA, const Entity& entityB) const;
-
 };
 
 template<typename NewEntity>
