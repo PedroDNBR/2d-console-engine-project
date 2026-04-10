@@ -70,7 +70,7 @@ void ConsoleRenderer::drawPixel(int x, int y, wchar_t ch, WORD color)
     buffer[y * realWidth + realX + 1] = pixel;
 }
 
-void ConsoleRenderer::drawSprite(const Camera& camera, const Sprite* sprite, float worldX, float worldY, bool flip)
+void ConsoleRenderer::drawSprite(int viewX, int viewY, const Sprite* sprite, float worldX, float worldY, bool flip)
 {
     if (sprite == nullptr) return;
     for (int y = 0; y < sprite->height; ++y) {
@@ -82,19 +82,19 @@ void ConsoleRenderer::drawSprite(const Camera& camera, const Sprite* sprite, flo
                 p = sprite->getPixel(x, y);
 
             if (!p.active) continue;
-            drawPixel((int)std::ceil(worldX - camera.x) + x, (int)std::floor(worldY - camera.y) + y, p.symbol, p.color);
+            drawPixel((int)std::ceil(worldX - viewX) + x, (int)std::floor(worldY - viewY) + y, p.symbol, p.color);
         }
     }
 }
 
-void ConsoleRenderer::present(const Camera& camera)
+void ConsoleRenderer::present(int viewX, int viewY)
 {
     for(const auto& s : spritesToRender)
-		drawSprite(camera, s.sprite, s.worldX, s.worldY, s.flip);
+		drawSprite(viewX, viewY, s.sprite, s.worldX, s.worldY, s.flip);
 
 #ifdef _DEBUG
     for (const auto& p : pixelsToRender)
-        drawPixel(p.x -camera.x, p.y - camera.y, p.ch, static_cast<WORD>(p.color));
+        drawPixel(p.x - viewX, p.y - viewY, p.ch, static_cast<WORD>(p.color));
 #endif
     WriteConsoleOutput(handle, buffer.data(), { (SHORT)realWidth, (SHORT)realHeight }, { 0, 0 }, &rect);
 

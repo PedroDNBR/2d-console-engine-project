@@ -3,7 +3,6 @@
 #include <vector>
 #include <chrono>
 #include "../Sprite/Sprite.h"
-#include "../World/Camera.h"
 #include "../Sprite/SpriteToRender.h"
 #ifdef _DEBUG
 #include "../Core/DebugDraw.h"
@@ -28,8 +27,8 @@ private:
 public:
     ConsoleRenderer(int w, int h);
     void drawPixel(int x, int y, wchar_t ch, WORD color);
-    void drawSprite(const Camera& camera, const Sprite* sprite, float worldX, float worldY, bool flip = false);
-    void present(const Camera& camera);
+    void drawSprite(int viewX, int viewY, const Sprite* sprite, float worldX, float worldY, bool flip = false);
+    void present(int viewX, int viewY);
     void clear();
     void queueSpriteDraw(const Sprite* sprite, float worldX, float worldY, bool flip = false);
 #ifdef _DEBUG

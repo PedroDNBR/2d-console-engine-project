@@ -63,7 +63,7 @@ void ConsoleEngine::update()
 
         currentScene->update(engineContext);
         QueueSceneSpritesToDraw();
-        renderer->present(camera);
+        renderer->present(camera.x, camera.y);
     }
 }
 
