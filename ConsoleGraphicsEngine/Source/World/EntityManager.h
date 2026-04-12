@@ -11,18 +11,22 @@ class EntityManager
 {
 public:
 	std::vector<std::unique_ptr<Entity>> entities;
+	std::vector<Entity*> entitiesToDestroy;
 
 	void start(const EngineContext& engineContext, const WorldContext& worldContext);
 	void update(const EngineContext& engineContext, const WorldContext& worldContext);
 	void fixedUpdate(const EngineContext& engineContext, const WorldContext& worldContext);
+
+	void DestroyEntity(Entity* entity);
+	void FlushDestroyedEntities();
+
+	float getDistanceBetweenEntities(const Entity& entityA, const Entity& entityB);
+	
 	template<typename NewEntity>
 	NewEntity* createEntity(float posX, float posY);
-	std::vector<SpriteToRender>& getEntitiesSpritesVisibleOnCamera(const Camera& camera);
-
 	Entity* getEntityByTag(uint16_t targetTag);
+	std::vector<SpriteToRender>& getEntitiesSpritesVisibleOnCamera(const Camera& camera);
 	std::vector<Entity*> getAllEntitiesByTag(uint16_t targetTag);
-	float getDistanceBetweenEntities(const Entity& entityA, const Entity& entityB);
-
 
 private:
 	std::vector<SpriteToRender> entitiesSpritesVisibleOnCamera;

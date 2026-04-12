@@ -19,6 +19,9 @@ public:
 	void createTopTilemaps(const EngineContext& engineContext, const std::vector<std::string>& spritesPaths, std::vector<std::vector<int>> tileStructure);
 	void createTopTilemapsCollision(std::vector<int> tilemapPhysics);
 
+	void DestroyEntity(Entity* entity) const;
+	void FlushDestroyedEntities() const;
+
 	bool isTileSolid(float worldX, float worldY, int width, int height) const;
 	bool isTileSolidAtPoint(float worldX, float worldY) const;
 

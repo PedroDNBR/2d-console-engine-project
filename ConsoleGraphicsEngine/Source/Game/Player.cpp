@@ -61,7 +61,6 @@ void Player::onUpdate(const EngineContext& engineContext, const WorldContext& wo
 
 void Player::onFixedUpdate(const EngineContext& engineContext, const WorldContext& worldContext)
 {
-
     Entity* collidedWith = worldContext.collidedWithEntityAtPoint(worldX + 4, worldX + (currentFrame->width - 4), worldY + currentFrame->height + 2, worldY + currentFrame->height + 2);
     if (collidedWith != nullptr)
     {
@@ -69,7 +68,6 @@ void Player::onFixedUpdate(const EngineContext& engineContext, const WorldContex
         {
             dynamic_cast<Goomba*>(collidedWith)->Die();
 			yVelocity = -jumpForce / 1.5f;
-            return;
         }
     }
 
@@ -80,7 +78,8 @@ void Player::onFixedUpdate(const EngineContext& engineContext, const WorldContex
     if (worldContext.isTileSolid(worldX, newWorldY + 1, currentFrame->width, currentFrame->height))
     {
         yVelocity = 0;
-		newWorldY = (int)((worldY + currentFrame->height) / currentFrame->height) * currentFrame->height - currentFrame->height - 1;
+        worldY = newWorldY;
+        //worldY = (int)((worldY + currentFrame->height) / currentFrame->height) * currentFrame->height - currentFrame->height - 1;
     }
     else
     {

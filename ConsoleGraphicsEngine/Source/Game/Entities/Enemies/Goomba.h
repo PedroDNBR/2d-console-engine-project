@@ -14,6 +14,8 @@ private:
     float gravity = 120.f;
     float animationWalkCycleTimer = 0;
     float goompaSpeed = 15;
+    float deathTargetTimer = .5f;
+    float deathTimer = 0;
     bool amIInSight = false;
     bool isGrounded = false;
     bool isAlive = true;

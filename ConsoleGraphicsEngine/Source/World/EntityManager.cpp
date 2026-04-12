@@ -1,8 +1,8 @@
+#include <algorithm>
+#include <iterator>
 #include "EntityManager.h"
 #include "../Sprite/SpriteImporter.h"
 #include "Camera.h"
-#include <algorithm>
-#include <iterator>
 
 void EntityManager::start(const EngineContext& engineContext, const WorldContext& worldContext)
 {
@@ -26,6 +26,29 @@ void EntityManager::fixedUpdate(const EngineContext& engineContext, const WorldC
 	{
 		entities[i]->fixedUpdate(engineContext, worldContext);
 	}
+}
+
+void EntityManager::DestroyEntity(Entity* entity)
+{
+	entitiesToDestroy.push_back(entity);
+}
+
+void EntityManager::FlushDestroyedEntities()
+{
+	for (Entity* entityToDestroy : entitiesToDestroy)
+	{
+		entityToDestroy->destroy();
+		entities.erase(
+			std::remove_if(
+				entities.begin(),
+				entities.end(),
+				[entityToDestroy](const std::unique_ptr<Entity>& entity) {
+					return entity.get() == entityToDestroy;
+				}),
+			entities.end()
+		);
+	}
+	entitiesToDestroy.clear();
 }
 
 std::vector<SpriteToRender>& EntityManager::getEntitiesSpritesVisibleOnCamera(const Camera& camera)

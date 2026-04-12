@@ -6,7 +6,7 @@ void Scene::start(ViewportInfo& info, EngineContext& engineContext)
 	entityManager = std::make_unique<EntityManager>();
 	tilemapManager = std::make_unique<TilemapManager>();
 	collisionManager = std::make_unique<CollisionManager>(*tilemapManager, *entityManager);
-	worldContext = std::make_unique<WorldContext>(*tilemapManager, * entityManager, *collisionManager);
+	worldContext = std::make_unique<WorldContext>(*tilemapManager, *entityManager, *collisionManager);
 	camera = Camera{ 0, 0, info.width, info.height };
 	onStart(info, engineContext, *worldContext);
 	entityManager->start(engineContext, *worldContext);
@@ -16,6 +16,7 @@ void Scene::update(EngineContext& engineContext)
 {
 	onUpdate(engineContext, *worldContext);
 	entityManager->update(engineContext, *worldContext);
+	entityManager->FlushDestroyedEntities();
 }
 
 void Scene::fixedUpdate(EngineContext& engineContext)

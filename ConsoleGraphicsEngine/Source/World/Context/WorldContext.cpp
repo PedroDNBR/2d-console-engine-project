@@ -52,4 +52,11 @@ float WorldContext::getDistanceBetweenEntities(const Entity& entityA, const Enti
 	return entityManager.getDistanceBetweenEntities(entityA, entityB);
 }
 
-
+void WorldContext::DestroyEntity(Entity* entity) const
+{
+	entityManager.DestroyEntity(entity);
+}
+void WorldContext::FlushDestroyedEntities() const
+{
+	entityManager.FlushDestroyedEntities();
+}

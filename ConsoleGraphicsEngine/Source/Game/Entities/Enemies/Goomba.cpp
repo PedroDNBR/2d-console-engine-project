@@ -23,7 +23,14 @@ void Goomba::onStart(const EngineContext& engineContext, const WorldContext& wor
 
 void Goomba::onUpdate(const EngineContext& engineContext, const WorldContext& worldContext)
 {
-    if (!isAlive) return;
+    if (!isAlive)
+    {
+		deathTimer += engineContext.deltaTime;
+		if (deathTargetTimer < deathTimer)
+		    worldContext.DestroyEntity(this);
+
+        return;
+    }
 
     if (targetPlayer == nullptr)
     {
