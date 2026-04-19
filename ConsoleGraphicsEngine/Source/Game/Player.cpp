@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "../World/Scene.h"
 #include "../Core/InputManager.h"
+#include "../Core/SceneManager.h"
 #include "./Entities/Enemies/Goomba.h"
 
 void Player::onStart(const EngineContext& engineContext, const WorldContext& worldContext)
@@ -68,6 +69,20 @@ void Player::onFixedUpdate(const EngineContext& engineContext, const WorldContex
         {
             dynamic_cast<Goomba*>(collidedWith)->Die();
 			yVelocity = -jumpForce / 1.5f;
+            collidedWith = nullptr;
+        }
+    }
+
+    collidedWith = worldContext.collidedWithEntityAtPoint(worldX + currentFrame->width, worldX + currentFrame->width, worldY, worldY + currentFrame->height);
+    if (collidedWith == nullptr)
+        collidedWith = worldContext.collidedWithEntityAtPoint(worldX, worldX, worldY, worldY + currentFrame->height);
+
+    if (collidedWith != nullptr)
+    {
+        if (collidedWith->tag == 2)
+        {
+			engineContext.sceneManager->reloadScene();
+            return;
         }
     }
 

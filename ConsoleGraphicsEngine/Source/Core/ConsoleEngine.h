@@ -1,25 +1,25 @@
 #pragma once
 #include <vector>
 #include <chrono>
+#include "SceneManager.h"
 #include "InputManager.h"
+#include "AssetManager.h"
 #include "./Context/EngineContext.h"
 #include "../Sprite/Sprite.h"
 #include "../World/Scene.h"
-#include "../World/Camera.h"
 #include "../Core/ConsoleRenderer.h"
 #ifdef _DEBUG
 #include "../Core/DebugDraw.h"
 #endif
-#include "AssetManager.h"
 
 class ConsoleEngine {
 
 public:
-    void run(std::unique_ptr<Scene> startingLevel);
+    void run(SceneFactory startingSceneFactory);
 
 private:
-    std::unique_ptr<Scene> currentScene;
     std::unique_ptr<ConsoleRenderer> renderer;
+    std::unique_ptr<SceneManager> sceneManager;
     std::unique_ptr<InputManager> inputManager;
 	std::unique_ptr<AssetManager> assetManager;
 #ifdef _DEBUG
@@ -28,7 +28,7 @@ private:
 
     bool isRunning() const { return running; }
     void handleInput();
-    void start(std::unique_ptr<Scene> startingLevel);
+    void start();
     void update();
     void QueueSceneSpritesToDraw();
     void HandleTime();

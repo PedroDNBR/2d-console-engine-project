@@ -1,9 +1,11 @@
-﻿#include "ConsoleEngine.h"
-#include "Window.h"
+﻿#include "Window.h"
+#include "ConsoleEngine.h"
 
-void ConsoleEngine::run(std::unique_ptr<Scene> startingLevel)
+void ConsoleEngine::run(SceneFactory startingSceneFactory)
 {
-    start(std::move(startingLevel));
+    sceneManager = std::make_unique<SceneManager>();
+    sceneManager->loadScene(startingSceneFactory);
+    start();
     update();
     cleanup();
 }
@@ -13,8 +15,11 @@ void ConsoleEngine::handleInput()
     //if (GetKeyState('P') & 0x8000) running = false;
 }
 
-void ConsoleEngine::start(std::unique_ptr<Scene> startingLevel)
+void ConsoleEngine::start()
 {
+    if (sceneManager->getCurrentScene() == nullptr)
+        throw new std::runtime_error("No starting scene set in SceneManager");
+
     lastFrame = std::chrono::steady_clock::now();
     assetManager = std::make_unique<AssetManager>();
     inputManager = std::make_unique<InputManager>();
@@ -24,15 +29,18 @@ void ConsoleEngine::start(std::unique_ptr<Scene> startingLevel)
     engineContext = EngineContext
     { 
         0, fixedDeltaTime, 
-        inputManager.get(), assetManager.get()
+        sceneManager.get(),
+        inputManager.get(),
+        assetManager.get()
 #ifdef _DEBUG
-     , debugDraw.get()
+        ,debugDraw.get()
 #endif
     };
 	renderer = std::make_unique<ConsoleRenderer>(206, 60);
-    currentScene = std::move(startingLevel);
+    // currentScene = std::move(startingLevel);
 	viewportInfo = ViewportInfo{ renderer->getLogicalWidth(), renderer->getLogicalHeight() };
-    currentScene->start(viewportInfo, engineContext);
+
+    sceneManager->getCurrentScene()->start(viewportInfo, engineContext);
 }
 
 void ConsoleEngine::update()
@@ -41,12 +49,12 @@ void ConsoleEngine::update()
     {
         HandleTime();
 
-        Camera& camera = currentScene->getCamera();
+        Camera& camera = sceneManager->getCurrentScene()->getCamera();
 
         if (renderer->hasWindowResized())
         {
             viewportInfo = ViewportInfo{ renderer->getLogicalWidth(), renderer->getLogicalHeight() };
-            currentScene->handleResize(viewportInfo);
+            sceneManager->getCurrentScene()->handleResize(viewportInfo);
         }
         
 		engineContext.deltaTime = deltaTime;
@@ -56,20 +64,26 @@ void ConsoleEngine::update()
 		int attempts = 0;
         while (accumulator >= fixedDeltaTime && attempts < maxFixedUpdatesPerFrame)
         {
-            currentScene->fixedUpdate(engineContext);
+            sceneManager->getCurrentScene()->fixedUpdate(engineContext);
             accumulator -= fixedDeltaTime;
             attempts++;
-		}
+        }
 
-        currentScene->update(engineContext);
+        sceneManager->getCurrentScene()->update(engineContext);
         QueueSceneSpritesToDraw();
         renderer->present(camera.x, camera.y);
+
+        if (sceneManager->processSceneRequest(viewportInfo, engineContext))
+        {
+            accumulator = 0;
+            lastFrame = std::chrono::steady_clock::now();
+        }
     }
 }
 
 void ConsoleEngine::QueueSceneSpritesToDraw()
 {
-    auto backgroundTiles = currentScene->getBackgroundTilesToRender();
+    auto backgroundTiles = sceneManager->getCurrentScene()->getBackgroundTilesToRender();
     for (size_t i = 0; i < backgroundTiles.size(); i++)
     {
         renderer->queueSpriteDraw(
@@ -79,7 +93,7 @@ void ConsoleEngine::QueueSceneSpritesToDraw()
             backgroundTiles[i].flip
         );
     }
-    auto topTiles = currentScene->getTopTilesToRender();
+    auto topTiles = sceneManager->getCurrentScene()->getTopTilesToRender();
     for (size_t i = 0; i < topTiles.size(); i++)
     {
         renderer->queueSpriteDraw(
@@ -89,7 +103,7 @@ void ConsoleEngine::QueueSceneSpritesToDraw()
             topTiles[i].flip
         );
     }
-    auto entitiesSprites = currentScene->getEntitiesToRender();
+    auto entitiesSprites = sceneManager->getCurrentScene()->getEntitiesToRender();
     for (size_t i = 0; i < entitiesSprites.size(); i++)
     {
         renderer->queueSpriteDraw(
@@ -116,10 +130,10 @@ void ConsoleEngine::HandleTime()
     auto now = std::chrono::steady_clock::now();
     deltaTime = std::chrono::duration<float>(now - lastFrame).count();
     lastFrame = now;
-	accumulator += deltaTime;
+    accumulator += deltaTime;
 }
 
 void ConsoleEngine::cleanup()
 {
-    currentScene->destroy(engineContext);
+    sceneManager->getCurrentScene()->destroy(engineContext);
 }

@@ -84,6 +84,7 @@
     <ClCompile Include="Source\World\CollisionManager.cpp">
       <Filter>Source\World</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source/Core/Window.h">
@@ -155,5 +156,6 @@
     <ClInclude Include="Source\Core\DebugDraw.h">
       <Filter>Source\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\SceneManager.h" />
   </ItemGroup>
 </Project>

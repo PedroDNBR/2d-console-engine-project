@@ -60,7 +60,7 @@ void World1n1::onStart(ViewportInfo& viewportInfo, EngineContext& engineContext,
 	);
 	player = worldContext.createEntity<Player>(10, 128);
 	player->tag = 1;
-	goombas.push_back(worldContext.createEntity<Goomba>(240, 128));
+	goombas.push_back(worldContext.createEntity<Goomba>(240-100, 128));
 
 	for (size_t i = 0; i < goombas.size(); i++)
 	{
